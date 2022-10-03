@@ -1,6 +1,6 @@
 import { HttpRequest, HttpResponse } from '../protocols/http';
 import { MissingParamError } from '../errors/missing-param-error';
-import { badRequest } from '../helpers/http-helper';
+import { badRequest, serverError } from '../helpers/http-helper';
 import { Controller } from '../protocols/controller';
 import { EmailValidator } from '../protocols/email-validator';
 import { InvalidParamError } from '../errors/invalid-param-error';
@@ -31,10 +31,9 @@ export class SignupController implements Controller {
         return badRequest(new InvalidParamError('email'));
       }
     } catch (e) {
-      return {
-        statusCode: 500,
-        body: new ServerError()
-      };
+      // o erro capturado no catch poderia ser logado em um serviço de monitoramento
+      // não é uma boa prática retornar para o cliente
+      return serverError();
     }
   }
 }

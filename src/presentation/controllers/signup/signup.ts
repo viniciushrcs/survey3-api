@@ -6,7 +6,7 @@ import {
   HttpResponse
 } from './signup-protocols';
 import { InvalidParamError, MissingParamError } from '../../errors';
-import { badRequest, serverError } from '../../helpers/http-helper';
+import { badRequest, ok, serverError } from '../../helpers/http-helper';
 
 export class SignupController implements Controller {
   private readonly emailValidator: EmailValidator;
@@ -46,10 +46,7 @@ export class SignupController implements Controller {
         password,
         email
       });
-      return {
-        statusCode: 200,
-        body: newAccount
-      };
+      return ok(newAccount);
     } catch (e) {
       // o erro capturado no catch poderia ser logado em um serviço de monitoramento
       // não é uma boa prática retornar para o cliente

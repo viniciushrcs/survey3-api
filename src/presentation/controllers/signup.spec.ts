@@ -97,7 +97,7 @@ describe('SignUpController', () => {
         name: 'name',
         email: 'email@',
         password: 'password',
-        passwordConfirmation: 'passwordConfirmation'
+        passwordConfirmation: 'password'
       }
     };
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
@@ -114,7 +114,7 @@ describe('SignUpController', () => {
         name: 'name',
         email: 'email@email.com',
         password: 'password',
-        passwordConfirmation: 'passwordConfirmation'
+        passwordConfirmation: 'password'
       }
     };
     sut.handle(httpRequest);
@@ -132,11 +132,29 @@ describe('SignUpController', () => {
         name: 'name',
         email: 'email@',
         password: 'password',
-        passwordConfirmation: 'passwordConfirmation'
+        passwordConfirmation: 'password'
       }
     };
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(errorCode);
     expect(httpResponse.body).toEqual(new ServerError());
+  });
+
+  test('Should return 400 if password and passwordConfirmation are not strict equal', () => {
+    const errorCode = 400;
+    const { sut } = makeSut();
+    const httpRequest = {
+      body: {
+        name: 'name',
+        email: 'email@',
+        password: 'password',
+        passwordConfirmation: 'different_password'
+      }
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(errorCode);
+    expect(httpResponse.body).toEqual(
+      new InvalidParamError('passwordConfirmation')
+    );
   });
 });

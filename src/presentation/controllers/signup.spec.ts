@@ -1,11 +1,32 @@
 import { SignupController } from './signup';
 import { InvalidParamError, MissingParamError, ServerError } from '../errors';
 import { EmailValidator } from '../protocols';
+import {
+  AddAccount,
+  AddAccountModel
+} from '../../domain/use-cases/add-account';
+import { AccountModel } from '../../domain/models/account';
 
 interface SutTypes {
   sut: SignupController;
   emailValidatorStub: EmailValidator;
+  addAccountStub: AddAccount;
 }
+
+const makeAddAccount = (): AddAccount => {
+  class AddAccountStub implements AddAccount {
+    add(account: AddAccountModel): AccountModel {
+      const newAccount = {
+        id: 'aa672452-0ca0-468d-b321-f724adab617e',
+        name: 'crash',
+        email: 'email@email.com',
+        password: 'mGcMhu6P'
+      };
+      return newAccount;
+    }
+  }
+  return new AddAccountStub();
+};
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -19,10 +40,12 @@ const makeEmailValidator = (): EmailValidator => {
 // sut => System Under Test
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator();
-  const sut = new SignupController(emailValidatorStub);
+  const addAccountStub = makeAddAccount();
+  const sut = new SignupController(emailValidatorStub, addAccountStub);
   return {
     sut,
-    emailValidatorStub
+    emailValidatorStub,
+    addAccountStub
   };
 };
 
@@ -162,21 +185,26 @@ describe('SignUpController', () => {
     });
   });
 
-  test('Should return 400 if password and passwordConfirmation are not strict equal', () => {
-    const errorCode = 400;
-    const { sut } = makeSut();
-    const httpRequest = {
-      body: {
+  describe('AddAccount', () => {
+    // O AddAccount é uma regra de negócio, um caso de uso do sistema
+    // Sua implementação fica em outra camada, não fica na Presentation Layer
+    test('Should call AddAccount with correct values', () => {
+      const { sut, addAccountStub } = makeSut();
+      const addAccountSpy = jest.spyOn(addAccountStub, 'add');
+      const httpRequest = {
+        body: {
+          name: 'name',
+          email: 'email@email.com',
+          password: 'password',
+          passwordConfirmation: 'password'
+        }
+      };
+      sut.handle(httpRequest);
+      expect(addAccountSpy).toHaveBeenCalledWith({
         name: 'name',
-        email: 'email@',
-        password: 'password',
-        passwordConfirmation: 'different_password'
-      }
-    };
-    const httpResponse = sut.handle(httpRequest);
-    expect(httpResponse.statusCode).toBe(errorCode);
-    expect(httpResponse.body).toEqual(
-      new InvalidParamError('passwordConfirmation')
-    );
+        email: 'email@email.com',
+        password: 'password'
+      });
+    });
   });
 });

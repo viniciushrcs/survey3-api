@@ -1,5 +1,5 @@
 import { SignupController } from './signup';
-import { MissingParamError, InvalidParamError, ServerError } from '../errors';
+import { InvalidParamError, MissingParamError, ServerError } from '../errors';
 import { EmailValidator } from '../protocols';
 
 interface SutTypes {
@@ -9,17 +9,8 @@ interface SutTypes {
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
-    isValid(email: string): boolean {
+    isValid(email: string) {
       return true;
-    }
-  }
-  return new EmailValidatorStub();
-};
-
-const makeEmailValidatorWithError = (): EmailValidator => {
-  class EmailValidatorStub implements EmailValidator {
-    isValid(email: string): boolean {
-      throw new Error();
     }
   }
   return new EmailValidatorStub();
@@ -132,8 +123,10 @@ describe('SignUpController', () => {
 
   test('Should return 500 if emailValidator throws', () => {
     const errorCode = 500;
-    const emailValidatorWithErrorStub = makeEmailValidatorWithError();
-    const sut = new SignupController(emailValidatorWithErrorStub);
+    const { sut, emailValidatorStub } = makeSut();
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error();
+    });
     const httpRequest = {
       body: {
         name: 'name',

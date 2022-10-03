@@ -210,5 +210,23 @@ describe('SignUpController', () => {
         password: 'password'
       });
     });
+    test('Should return 500 if emailValidator throws', () => {
+      const errorCode = 500;
+      const { sut, addAccountStub } = makeSut();
+      jest.spyOn(addAccountStub, 'add').mockImplementationOnce(() => {
+        throw new Error();
+      });
+      const httpRequest = {
+        body: {
+          name: 'name',
+          email: 'email@',
+          password: 'password',
+          passwordConfirmation: 'password'
+        }
+      };
+      const httpResponse = sut.handle(httpRequest);
+      expect(httpResponse.statusCode).toBe(errorCode);
+      expect(httpResponse.body).toEqual(new ServerError());
+    });
   });
 });

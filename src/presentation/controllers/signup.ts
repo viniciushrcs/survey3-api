@@ -1,10 +1,10 @@
 import {
-  HttpRequest,
-  HttpResponse,
   Controller,
-  EmailValidator
+  EmailValidator,
+  HttpRequest,
+  HttpResponse
 } from '../protocols';
-import { MissingParamError, InvalidParamError } from '../errors';
+import { InvalidParamError, MissingParamError } from '../errors';
 import { badRequest, serverError } from '../helpers/http-helper';
 
 export class SignupController implements Controller {
@@ -26,6 +26,11 @@ export class SignupController implements Controller {
         if (!httpRequest.body[field]) {
           return badRequest(new MissingParamError(field));
         }
+      }
+      const isPasswordConfirmationMatching =
+        httpRequest.body.password === httpRequest.body.passwordConfirmation;
+      if (!isPasswordConfirmationMatching) {
+        return badRequest(new InvalidParamError('passwordConfirmation'));
       }
       const isEmailValid = this.emailValidator.isValid(httpRequest.body.email);
       if (!isEmailValid) {

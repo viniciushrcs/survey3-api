@@ -210,7 +210,7 @@ describe('SignUpController', () => {
         password: 'password'
       });
     });
-    test('Should return 500 if emailValidator throws', () => {
+    test('Should return 500 if AddAccount throws', () => {
       const errorCode = 500;
       const { sut, addAccountStub } = makeSut();
       jest.spyOn(addAccountStub, 'add').mockImplementationOnce(() => {
@@ -227,6 +227,25 @@ describe('SignUpController', () => {
       const httpResponse = sut.handle(httpRequest);
       expect(httpResponse.statusCode).toBe(errorCode);
       expect(httpResponse.body).toEqual(new ServerError());
+    });
+    test('Should return 200 if AddAccount is called properly', () => {
+      const { sut } = makeSut();
+      const httpRequest = {
+        body: {
+          name: 'crash',
+          email: 'email@email.com',
+          password: 'mGcMhu6P',
+          passwordConfirmation: 'mGcMhu6P'
+        }
+      };
+      const httpResponse = sut.handle(httpRequest);
+      expect(httpResponse.statusCode).toBe(200);
+      expect(httpResponse.body).toEqual({
+        id: 'aa672452-0ca0-468d-b321-f724adab617e',
+        name: 'crash',
+        email: 'email@email.com',
+        password: 'mGcMhu6P'
+      });
     });
   });
 });

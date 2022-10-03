@@ -11,7 +11,7 @@ export interface AddAccountModel {
 }
 
 export interface AddAccount {
-  add(account: AddAccountModel): AccountModel;
+  add(account: AddAccountModel): Promise<AccountModel>;
 }
 // a camada de domínio não faz implementações
 // somente contém assinatura das regras de negócio do sistema

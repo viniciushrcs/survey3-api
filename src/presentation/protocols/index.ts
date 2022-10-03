@@ -1,3 +1,5 @@
 export * from './http';
 export * from './controller';
-export * from './email-validator';
+
+// aqui só ficam os atalhos para protocolos genéricos
+// que podem ser usados por qualquer controlador

@@ -1,16 +1,15 @@
 import { BcryptAdapter } from './bcrypt-adapter';
 import bcrypt from 'bcrypt';
 
-jest.mock('bcrypt', () => ({
-  async hash(): Promise<string> {
-    return new Promise((resolve) => resolve('hashed'));
-  }
-}));
-
 const salt = 12;
 const makeSut = (): BcryptAdapter => {
   return new BcryptAdapter(salt);
 };
+jest.mock('bcrypt', () => ({
+  async hash(): Promise<string> {
+    return 'hashed';
+  }
+}));
 
 describe('BCryptAdapter', () => {
   test('Should call bcrypt with correct values', async () => {
@@ -24,5 +23,14 @@ describe('BCryptAdapter', () => {
     const sut = makeSut();
     const encryptedPassword = await sut.encrypt('value');
     expect(encryptedPassword).toBe('hashed');
+  });
+
+  test('Should throw if bcrypt throws', async () => {
+    const sut = makeSut();
+    jest.spyOn(bcrypt, 'hash').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const promise = sut.encrypt('value');
+    await expect(promise).rejects.toThrow();
   });
 });

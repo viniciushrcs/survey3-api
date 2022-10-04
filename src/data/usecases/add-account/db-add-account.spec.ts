@@ -98,5 +98,25 @@ describe('DbAddAccount UseCase', () => {
         password: 'hashed_password'
       });
     });
+
+    test('Should throw if AddAccountRepository throws', async () => {
+      // aqui não devemos tratar o erro com um try/catch, pois isso é responsabilidade
+      // da camada de Presentation
+
+      // A camada de Presentation é quem retorna os erros e repassa ao cliente
+      // Informando o que aconteceu
+
+      const addAccount: AddAccountModel = {
+        name: 'name',
+        email: 'email@email.com',
+        password: 'password'
+      };
+      const { sut, addAccountRepositoryStub } = makeSut();
+      jest.spyOn(addAccountRepositoryStub, 'add').mockRejectedValueOnce(() => {
+        throw new Error();
+      });
+      const promise = sut.add(addAccount);
+      await expect(promise).rejects.toThrow();
+    });
   });
 });

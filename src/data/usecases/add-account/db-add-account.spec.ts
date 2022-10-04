@@ -118,5 +118,21 @@ describe('DbAddAccount UseCase', () => {
       const promise = sut.add(addAccount);
       await expect(promise).rejects.toThrow();
     });
+
+    test('Should return an account on success', async () => {
+      const { sut } = makeSut();
+      const addAccount: AddAccountModel = {
+        name: 'name',
+        email: 'email@email.com',
+        password: 'password'
+      };
+      const account = await sut.add(addAccount);
+      expect(account).toEqual({
+        id: 'dcaddfa4-5cc4-4442-ae9e-011fbc64971f',
+        name: 'name',
+        email: 'email@email.com',
+        password: 'hashed_password'
+      });
+    });
   });
 });

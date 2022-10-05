@@ -10,8 +10,17 @@ describe('Account Mongo Repository', () => {
     await MongoHelper.disconnect();
   });
 
+  beforeEach(async () => {
+    const accountCollection = MongoHelper.getCollection('accounts');
+    await accountCollection.deleteMany({});
+  });
+
+  const makeSut = () => {
+    return new AccountMongoRepository();
+  };
+
   test('Should return an account on sucess', async () => {
-    const sut = new AccountMongoRepository();
+    const sut = makeSut();
     const newAccount = await sut.add({
       name: 'any_name',
       email: 'any_email@email.com',

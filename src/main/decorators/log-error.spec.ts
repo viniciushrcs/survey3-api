@@ -1,17 +1,17 @@
-import { LoggerDecorator } from './logger';
+import { LogErrorDecorator } from './log-error';
 import {
   Controller,
   HttpRequest,
   HttpResponse
 } from '../../presentation/protocols';
 import { ok, serverError } from '../../presentation/helpers/http-helper';
-import { LoggerRepository } from '../../data/protocols/logger-repository';
+import { LogErrorRepository } from '../../data/protocols/log-error-repository';
 import { AccountModel } from '../../domain/models/account';
 
 interface SutTypes {
-  sut: LoggerDecorator;
+  sut: LogErrorDecorator;
   controllerStub: Controller;
-  loggerRepoStub: LoggerRepository;
+  loggerRepoStub: LogErrorRepository;
 }
 
 const makeControllerStub = () => {
@@ -23,9 +23,9 @@ const makeControllerStub = () => {
   return new ControllerStub();
 };
 
-const makeLoggerRepoStub = (): LoggerRepository => {
-  class LoggerRepositoryStub implements LoggerRepository {
-    async log(stack: string): Promise<void> {
+const makeLoggerRepoStub = (): LogErrorRepository => {
+  class LoggerRepositoryStub implements LogErrorRepository {
+    async logError(stack: string): Promise<void> {
       return new Promise((resolve) => resolve());
     }
   }
@@ -35,7 +35,7 @@ const makeLoggerRepoStub = (): LoggerRepository => {
 const makeSut = (): SutTypes => {
   const controllerStub = makeControllerStub();
   const loggerRepoStub = makeLoggerRepoStub();
-  const sut = new LoggerDecorator(controllerStub, loggerRepoStub);
+  const sut = new LogErrorDecorator(controllerStub, loggerRepoStub);
   return {
     sut,
     controllerStub,
@@ -89,7 +89,7 @@ describe('LoggerDeccorator', () => {
   test('Should call LoggerRepository with correct error when controller returns a server error', async () => {
     const { sut, controllerStub, loggerRepoStub } = makeSut();
 
-    const logSpy = jest.spyOn(loggerRepoStub, 'log');
+    const logSpy = jest.spyOn(loggerRepoStub, 'logError');
     jest
       .spyOn(controllerStub, 'handle')
       .mockResolvedValueOnce(makeServerError());

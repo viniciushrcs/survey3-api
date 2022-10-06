@@ -5,6 +5,8 @@ import {
 } from '../../presentation/protocols';
 import { LoggerRepository } from '../../data/protocols/logger-repository';
 
+//todo tentar implementar o decorator do modo novo, usando o @decorator
+
 export class LoggerDecorator implements Controller {
   private readonly controller: Controller;
   private readonly logger: LoggerRepository;

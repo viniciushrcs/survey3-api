@@ -3,13 +3,24 @@ import { badRequest, serverError } from '../../helpers/http-helper';
 import { InvalidParamError, MissingParamError } from '../../errors';
 import { LoginController } from './login';
 import { EmailValidator } from '../../protocols/email-validator';
+import { Authentication } from '../../../domain/usecases/authentication';
 
 interface SutTypes {
   sut: LoginController;
   emailValidatorStub: EmailValidator;
+  authenticationStub: Authentication;
 }
 
-const makeEmailValidatorStub = () => {
+const makeAuthenticationStub = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async authenticate(email: string, password: string): Promise<string> {
+      return new Promise((resolve) => resolve('any_token'));
+    }
+  }
+  return new AuthenticationStub();
+};
+
+const makeEmailValidatorStub = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
     isValid(email: string): boolean {
       return true;
@@ -20,10 +31,12 @@ const makeEmailValidatorStub = () => {
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidatorStub();
-  const sut = new LoginController(emailValidatorStub);
+  const authenticationStub = makeAuthenticationStub();
+  const sut = new LoginController(emailValidatorStub, authenticationStub);
   return {
     sut,
-    emailValidatorStub
+    emailValidatorStub,
+    authenticationStub
   };
 };
 
@@ -83,6 +96,19 @@ describe('Login Controller', () => {
       const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid');
       await sut.handle(makeFakeRequest());
       expect(isValidSpy).toHaveBeenCalledWith('email@email.com');
+    });
+  });
+
+  describe('Authentication', () => {
+    test('Should call Authentication with correct values', async () => {
+      const { sut, authenticationStub } = makeSut();
+      const authenticateSpy = jest.spyOn(authenticationStub, 'authenticate');
+
+      await sut.handle(makeFakeRequest());
+      expect(authenticateSpy).toHaveBeenCalledWith(
+        'email@email.com',
+        'password'
+      );
     });
   });
 });

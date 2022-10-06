@@ -8,14 +8,12 @@ import { LogErrorRepository } from '../../data/protocols/log-error-repository';
 //todo tentar implementar o decorator do modo novo, usando o @decorator
 
 export class LogErrorDecorator implements Controller {
-  private readonly controller: Controller;
-  private readonly logger: LogErrorRepository;
   private readonly serverErrorStatusCode = 500;
 
-  constructor(controller: Controller, logger: LogErrorRepository) {
-    this.controller = controller;
-    this.logger = logger;
-  }
+  constructor(
+    private readonly controller: Controller,
+    private readonly logger: LogErrorRepository
+  ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     const httpResponse = await this.controller.handle(httpRequest);

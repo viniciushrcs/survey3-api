@@ -67,4 +67,25 @@ describe('LoggerDeccorator', () => {
     await sut.handle(httpRequest);
     expect(handleSpy).toHaveBeenCalledWith(httpRequest);
   });
+
+  test('Should return the exact value returned by Controller', async () => {
+    const { sut } = makeSut();
+    const httpRequest: HttpRequest = {
+      body: {
+        email: 'email@email.com',
+        name: 'name',
+        password: 'password',
+        passwordConfirmation: 'password'
+      }
+    };
+    const response = await sut.handle(httpRequest);
+    expect(response).toEqual({
+      statusCode: 200,
+      body: {
+        email: 'email@email.com',
+        name: 'name',
+        password: 'password'
+      }
+    });
+  });
 });

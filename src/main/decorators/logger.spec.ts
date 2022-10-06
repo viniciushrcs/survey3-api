@@ -4,10 +4,13 @@ import {
   HttpRequest,
   HttpResponse
 } from '../../presentation/protocols';
+import { serverError } from '../../presentation/helpers/http-helper';
+import { LoggerRepository } from '../../data/protocols/logger-repository';
 
 interface SutTypes {
   sut: LoggerDecorator;
   controllerStub: Controller;
+  loggerRepoStub: LoggerRepository;
 }
 
 const makeControllerStub = () => {
@@ -28,12 +31,23 @@ const makeControllerStub = () => {
   return new ControllerStub();
 };
 
+const makeLoggerRepoStub = (): LoggerRepository => {
+  class LoggerRepositoryStub implements LoggerRepository {
+    async log(stack: string): Promise<void> {
+      return new Promise((resolve) => resolve());
+    }
+  }
+  return new LoggerRepositoryStub();
+};
+
 const makeSut = (): SutTypes => {
   const controllerStub = makeControllerStub();
-  const sut = new LoggerDecorator(controllerStub);
+  const loggerRepoStub = makeLoggerRepoStub();
+  const sut = new LoggerDecorator(controllerStub, loggerRepoStub);
   return {
     sut,
-    controllerStub
+    controllerStub,
+    loggerRepoStub
   };
 };
 
@@ -87,5 +101,25 @@ describe('LoggerDeccorator', () => {
         password: 'password'
       }
     });
+  });
+
+  test('Should call LoggerRepository with correct error when controller returns a server error', async () => {
+    const { sut, controllerStub, loggerRepoStub } = makeSut();
+    const httpRequest: HttpRequest = {
+      body: {
+        email: 'email@email.com',
+        name: 'name',
+        password: 'password',
+        passwordConfirmation: 'password'
+      }
+    };
+    const fakeError = new Error();
+    fakeError.stack = 'any_stack';
+    const error = serverError(fakeError);
+    const logSpy = jest.spyOn(loggerRepoStub, 'log');
+    jest.spyOn(controllerStub, 'handle').mockResolvedValueOnce(error);
+    await sut.handle(httpRequest);
+    expect(logSpy).toHaveBeenCalled();
+    expect(logSpy).toHaveBeenCalledWith('any_stack');
   });
 });

@@ -50,7 +50,7 @@ export class SignupController implements Controller {
     } catch (e) {
       // o erro capturado no catch poderia ser logado em um serviço de monitoramento
       // não é uma boa prática retornar para o cliente
-      return serverError();
+      return serverError(e);
     }
   }
 }

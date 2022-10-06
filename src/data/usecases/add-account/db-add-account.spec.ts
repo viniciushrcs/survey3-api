@@ -12,16 +12,23 @@ interface SutTypes {
   addAccountRepositoryStub: AddAccountRepository;
 }
 
+const makeFakeAccount = (): AccountModel => ({
+  id: 'dcaddfa4-5cc4-4442-ae9e-011fbc64971f',
+  name: 'name',
+  email: 'email',
+  password: 'hashed_password'
+});
+
+const makeAddAccount = (): AddAccountModel => ({
+  name: 'name',
+  email: 'email@email.com',
+  password: 'password'
+});
+
 const makeAddAccountRepository = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
     async add(accountData: AddAccountModel): Promise<AccountModel> {
-      const newAccount = {
-        id: 'dcaddfa4-5cc4-4442-ae9e-011fbc64971f',
-        name: accountData.name,
-        email: accountData.email,
-        password: 'hashed_password'
-      };
-      return new Promise((resolve) => resolve(newAccount));
+      return new Promise((resolve) => resolve(makeFakeAccount()));
     }
   }
   return new AddAccountRepositoryStub();
@@ -50,14 +57,9 @@ const makeSut = (): SutTypes => {
 describe('DbAddAccount UseCase', () => {
   describe('Encrypter', () => {
     test('Should call Encrypter with correct password', async () => {
-      const addAccount: AddAccountModel = {
-        name: 'name',
-        email: 'email@email.com',
-        password: 'password'
-      };
       const { sut, encrypterStub } = makeSut();
       const encryptSpy = jest.spyOn(encrypterStub, 'encrypt');
-      await sut.add(addAccount);
+      await sut.add(makeAddAccount());
       expect(encryptSpy).toHaveBeenCalledWith('password');
     });
 
@@ -67,31 +69,20 @@ describe('DbAddAccount UseCase', () => {
 
       // A camada de Presentation é quem retorna os erros e repassa ao cliente
       // Informando o que aconteceu
-
-      const addAccount: AddAccountModel = {
-        name: 'name',
-        email: 'email@email.com',
-        password: 'password'
-      };
       const { sut, encrypterStub } = makeSut();
       jest.spyOn(encrypterStub, 'encrypt').mockRejectedValueOnce(() => {
         throw new Error();
       });
-      const promise = sut.add(addAccount);
+      const promise = sut.add(makeAddAccount());
       await expect(promise).rejects.toThrow();
     });
   });
 
   describe('AddAccountRepository', () => {
     test('Should call AddAccountRepository with correct values', async () => {
-      const addAccount: AddAccountModel = {
-        name: 'name',
-        email: 'email@email.com',
-        password: 'password'
-      };
       const { sut, addAccountRepositoryStub } = makeSut();
       const addSpy = jest.spyOn(addAccountRepositoryStub, 'add');
-      await sut.add(addAccount);
+      await sut.add(makeAddAccount());
       expect(addSpy).toHaveBeenCalledWith({
         name: 'name',
         email: 'email@email.com',
@@ -105,34 +96,18 @@ describe('DbAddAccount UseCase', () => {
 
       // A camada de Presentation é quem retorna os erros e repassa ao cliente
       // Informando o que aconteceu
-
-      const addAccount: AddAccountModel = {
-        name: 'name',
-        email: 'email@email.com',
-        password: 'password'
-      };
       const { sut, addAccountRepositoryStub } = makeSut();
       jest.spyOn(addAccountRepositoryStub, 'add').mockRejectedValueOnce(() => {
         throw new Error();
       });
-      const promise = sut.add(addAccount);
+      const promise = sut.add(makeAddAccount());
       await expect(promise).rejects.toThrow();
     });
 
     test('Should return an account on success', async () => {
       const { sut } = makeSut();
-      const addAccount: AddAccountModel = {
-        name: 'name',
-        email: 'email@email.com',
-        password: 'password'
-      };
-      const account = await sut.add(addAccount);
-      expect(account).toEqual({
-        id: 'dcaddfa4-5cc4-4442-ae9e-011fbc64971f',
-        name: 'name',
-        email: 'email@email.com',
-        password: 'hashed_password'
-      });
+      const account = await sut.add(makeAddAccount());
+      expect(account).toEqual(makeFakeAccount());
     });
   });
 });

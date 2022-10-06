@@ -8,7 +8,8 @@ import {
   AccountModel,
   AddAccount,
   AddAccountModel,
-  EmailValidator
+  EmailValidator,
+  HttpRequest
 } from './signup-protocols';
 import { badRequest, ok, serverError } from '../../helpers/http-helper';
 
@@ -35,7 +36,7 @@ const makeFakeAccount = (): AccountModel => ({
   password: 'mGcMhu6P'
 });
 
-const makeFakeRequest = () => ({
+const makeFakeRequest = (): HttpRequest => ({
   body: {
     name: 'crash',
     email: 'email@email.com',

@@ -4,8 +4,11 @@ import { MissingParamError } from '../../errors';
 
 export class LoginController implements Controller {
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    return new Promise((resolve) =>
-      resolve(badRequest(new MissingParamError('email')))
-    );
+    const requiredFields = ['email', 'password'];
+    for (const field of requiredFields) {
+      if (!httpRequest.body[field]) {
+        return badRequest(new MissingParamError(field));
+      }
+    }
   }
 }

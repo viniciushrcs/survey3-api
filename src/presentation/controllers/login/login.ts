@@ -1,5 +1,6 @@
 import {
   badRequest,
+  ok,
   serverError,
   unauthorized
 } from '../../helpers/http-helper';
@@ -34,6 +35,7 @@ export class LoginController implements Controller {
       if (!authToken) {
         return unauthorized();
       }
+      return ok({ authToken });
     } catch (e) {
       return serverError(e);
     }

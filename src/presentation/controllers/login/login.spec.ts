@@ -1,5 +1,6 @@
 import {
   badRequest,
+  ok,
   serverError,
   unauthorized
 } from '../../helpers/http-helper';
@@ -111,6 +112,15 @@ describe('Login Controller', () => {
       expect(httpResponse).toEqual(unauthorized());
     });
 
+    test('Should return 500 if Authentication throws', async () => {
+      const { sut, authenticationStub } = makeSut();
+      jest
+        .spyOn(authenticationStub, 'authenticate')
+        .mockRejectedValueOnce(new Error());
+      const httpResponse = await sut.handle(makeFakeRequest());
+      expect(httpResponse).toEqual(serverError(new Error()));
+    });
+
     test('Should call Authentication with correct values', async () => {
       const { sut, authenticationStub } = makeSut();
       const authenticateSpy = jest.spyOn(authenticationStub, 'authenticate');
@@ -119,6 +129,16 @@ describe('Login Controller', () => {
       expect(authenticateSpy).toHaveBeenCalledWith(
         'email@email.com',
         'password'
+      );
+    });
+
+    test('Should return 200 if valid credentials are provided', async () => {
+      const { sut } = makeSut();
+      const httpResponse = await sut.handle(makeFakeRequest());
+      expect(httpResponse).toEqual(
+        ok({
+          authToken: 'any_token'
+        })
       );
     });
   });

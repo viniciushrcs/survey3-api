@@ -84,24 +84,6 @@ const makeSut = (): SutTypes => {
 };
 
 describe('SignUpController', () => {
-  describe('Request parameters validation', () => {
-    test('Should return 400 if password and passwordConfirmation are not strict equal', async () => {
-      const { sut } = makeSut();
-      const httpRequest = {
-        body: {
-          name: 'name',
-          email: 'email@',
-          password: 'password',
-          passwordConfirmation: 'different_password'
-        }
-      };
-      const httpResponse = await sut.handle(httpRequest);
-      expect(httpResponse).toEqual(
-        badRequest(new InvalidParamError('passwordConfirmation'))
-      );
-    });
-  });
-
   describe('EmailValidator', () => {
     test('Should return 400 if email is not valid', async () => {
       const { sut, emailValidatorStub } = makeSut();

@@ -50,7 +50,6 @@ const makeValidation = (): Validation => {
   return new ValidationStub();
 };
 
-// sut => System Under Test
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount();
   const validationStub = makeValidation();
@@ -91,7 +90,9 @@ describe('SignUpController', () => {
       const httpResponse = await sut.handle(makeFakeRequest());
       expect(httpResponse).toEqual(ok(makeFakeAccount()));
     });
+  });
 
+  describe('Validation', () => {
     test('Should call Validation with correct values', async () => {
       const { sut, validationStub } = makeSut();
       const validateSpy = jest.spyOn(validationStub, 'validate');

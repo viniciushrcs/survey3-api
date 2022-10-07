@@ -9,7 +9,8 @@ import {
   AddAccount,
   AddAccountModel,
   EmailValidator,
-  HttpRequest
+  HttpRequest,
+  Validation
 } from './signup-protocols';
 import { badRequest, ok, serverError } from '../../helpers/http-helper';
 
@@ -17,6 +18,7 @@ interface SutTypes {
   sut: SignupController;
   emailValidatorStub: EmailValidator;
   addAccountStub: AddAccount;
+  validationStub: Validation;
 }
 
 const makeAddAccount = (): AddAccount => {
@@ -54,15 +56,30 @@ const makeEmailValidator = (): EmailValidator => {
   return new EmailValidatorStub();
 };
 
+const makeValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate(input: any): Error {
+      return null;
+    }
+  }
+  return new ValidationStub();
+};
+
 // sut => System Under Test
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator();
   const addAccountStub = makeAddAccount();
-  const sut = new SignupController(emailValidatorStub, addAccountStub);
+  const validationStub = makeValidation();
+  const sut = new SignupController(
+    emailValidatorStub,
+    addAccountStub,
+    validationStub
+  );
   return {
     sut,
     emailValidatorStub,
-    addAccountStub
+    addAccountStub,
+    validationStub
   };
 };
 
@@ -201,6 +218,13 @@ describe('SignUpController', () => {
       const { sut } = makeSut();
       const httpResponse = await sut.handle(makeFakeRequest());
       expect(httpResponse).toEqual(ok(makeFakeAccount()));
+    });
+
+    test('Should call Validation with correct values', async () => {
+      const { sut, validationStub } = makeSut();
+      const validateSpy = jest.spyOn(validationStub, 'validate');
+      await sut.handle(makeFakeRequest());
+      expect(validateSpy).toHaveBeenCalledWith(makeFakeRequest().body);
     });
   });
 });

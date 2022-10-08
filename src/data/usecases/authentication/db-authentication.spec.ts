@@ -144,5 +144,11 @@ describe('DbAuthentication', () => {
       const promise = sut.authenticate(makeFakeAuthInput());
       await expect(promise).rejects.toThrow();
     });
+
+    test(' Should return a new authToken on success', async () => {
+      const { sut } = makeSut();
+      const authToken = await sut.authenticate(makeFakeAuthInput());
+      expect(authToken).toBe('any_token');
+    });
   });
 });

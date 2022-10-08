@@ -2,11 +2,13 @@ import { DbAuthentication } from './db-authentication';
 import {
   AccountModel,
   AuthenticationModel,
+  HashComparer,
   LoadAccountByEmailRepository
 } from './db-authentication-protocols';
 
 interface SutTypes {
   loadAccountByEmailRepoStub: LoadAccountByEmailRepository;
+  hashComparerStub: HashComparer;
   sut: DbAuthentication;
 }
 
@@ -31,12 +33,26 @@ const makeLoadAccountByEmailRepoStub = () => {
   return new LoadAccountByEmailRepoStub();
 };
 
+const makeHashComparerStub = () => {
+  class HashComparerStub implements HashComparer {
+    async compare(value: string, hash: string): Promise<boolean> {
+      return new Promise((resolve) => resolve(true));
+    }
+  }
+  return new HashComparerStub();
+};
+
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepoStub = makeLoadAccountByEmailRepoStub();
-  const sut = new DbAuthentication(loadAccountByEmailRepoStub);
+  const hashComparerStub = makeHashComparerStub();
+  const sut = new DbAuthentication(
+    loadAccountByEmailRepoStub,
+    hashComparerStub
+  );
   return {
     sut,
-    loadAccountByEmailRepoStub
+    loadAccountByEmailRepoStub,
+    hashComparerStub
   };
 };
 
@@ -70,6 +86,15 @@ describe('DbAuthentication', () => {
         .mockReturnValueOnce(null);
       const authToken = await sut.authenticate(makeFakeAuthInput());
       expect(authToken).toBeNull();
+    });
+  });
+
+  describe('HashComparer', () => {
+    test(' Should call HashComparer with correct password', async () => {
+      const { sut, hashComparerStub } = makeSut();
+      const compareSpy = jest.spyOn(hashComparerStub, 'compare');
+      await sut.authenticate(makeFakeAuthInput());
+      expect(compareSpy).toHaveBeenCalledWith('password', 'wTzVTHQ6');
     });
   });
 });

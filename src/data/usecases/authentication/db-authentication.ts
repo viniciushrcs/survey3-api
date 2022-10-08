@@ -32,7 +32,9 @@ export class DbAuthentication implements Authentication {
       authToken = await this.tokenGenerator.generate(account.id);
     }
 
-    await this.updateAccessTokenRepository.update(account.id, authToken);
+    if (authToken) {
+      await this.updateAccessTokenRepository.update(account.id, authToken);
+    }
     return authToken;
   }
 }

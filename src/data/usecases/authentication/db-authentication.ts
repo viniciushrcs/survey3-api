@@ -3,14 +3,16 @@ import {
   AuthenticationModel,
   HashComparer,
   LoadAccountByEmailRepository,
-  TokenGenerator
+  TokenGenerator,
+  UpdateAccessTokenRepository
 } from './db-authentication-protocols';
 
 export class DbAuthentication implements Authentication {
   constructor(
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hashComparer: HashComparer,
-    private readonly tokenGenerator: TokenGenerator
+    private readonly tokenGenerator: TokenGenerator,
+    private readonly updateAccessTokenRepository: UpdateAccessTokenRepository
   ) {}
   async authenticate(authentication: AuthenticationModel): Promise<string> {
     let authToken = null;
@@ -30,6 +32,7 @@ export class DbAuthentication implements Authentication {
       authToken = await this.tokenGenerator.generate(account.id);
     }
 
+    await this.updateAccessTokenRepository.update(account.id, authToken);
     return authToken;
   }
 }

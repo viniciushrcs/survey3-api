@@ -105,5 +105,12 @@ describe('DbAuthentication', () => {
       const promise = sut.authenticate(makeFakeAuthInput());
       await expect(promise).rejects.toThrow();
     });
+
+    test(' Should return null if comparison fails', async () => {
+      const { sut, hashComparerStub } = makeSut();
+      jest.spyOn(hashComparerStub, 'compare').mockResolvedValueOnce(false);
+      const authToken = await sut.authenticate(makeFakeAuthInput());
+      expect(authToken).toBeNull();
+    });
   });
 });

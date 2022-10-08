@@ -18,7 +18,7 @@ export class DbAuthentication implements Authentication {
     let authToken = null;
     let isPasswordValid = false;
 
-    const account = await this.loadAccountByEmailRepository.loadAccount(
+    const account = await this.loadAccountByEmailRepository.loadAccountByEmail(
       authentication.email
     );
     if (account) {
@@ -33,7 +33,10 @@ export class DbAuthentication implements Authentication {
     }
 
     if (authToken) {
-      await this.updateAccessTokenRepository.update(account.id, authToken);
+      await this.updateAccessTokenRepository.updateAccessToken(
+        account.id,
+        authToken
+      );
     }
     return authToken;
   }

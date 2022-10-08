@@ -3,17 +3,19 @@ import {
   AccountModel,
   AuthenticationModel,
   HashComparer,
-  LoadAccountByEmailRepository
+  LoadAccountByEmailRepository,
+  TokenGenerator
 } from './db-authentication-protocols';
 
 interface SutTypes {
   loadAccountByEmailRepoStub: LoadAccountByEmailRepository;
   hashComparerStub: HashComparer;
+  tokenGeneratorStub: TokenGenerator;
   sut: DbAuthentication;
 }
 
 const makeFakeAccount = (): AccountModel => ({
-  id: 'c53cd3f2-df40-497a-8061-56d9f8d4df01',
+  id: 'any_id',
   name: 'name',
   email: 'email@email.com',
   password: 'wTzVTHQ6'
@@ -24,13 +26,22 @@ const makeFakeAuthInput = (): AuthenticationModel => ({
   password: 'password'
 });
 
-const makeLoadAccountByEmailRepoStub = () => {
+const makeLoadAccountByEmailRepoStub = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepoStub implements LoadAccountByEmailRepository {
     async loadAccount(email: string): Promise<AccountModel> {
       return new Promise((resolve) => resolve(makeFakeAccount()));
     }
   }
   return new LoadAccountByEmailRepoStub();
+};
+
+const makeTokenGeneratorStub = (): TokenGenerator => {
+  class TokenGeneratorStub implements TokenGenerator {
+    async generate(id: string): Promise<string> {
+      return new Promise((resolve) => resolve('any_token'));
+    }
+  }
+  return new TokenGeneratorStub();
 };
 
 const makeHashComparerStub = () => {
@@ -45,14 +56,17 @@ const makeHashComparerStub = () => {
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepoStub = makeLoadAccountByEmailRepoStub();
   const hashComparerStub = makeHashComparerStub();
+  const tokenGeneratorStub = makeTokenGeneratorStub();
   const sut = new DbAuthentication(
     loadAccountByEmailRepoStub,
-    hashComparerStub
+    hashComparerStub,
+    tokenGeneratorStub
   );
   return {
     sut,
     loadAccountByEmailRepoStub,
-    hashComparerStub
+    hashComparerStub,
+    tokenGeneratorStub
   };
 };
 
@@ -111,6 +125,15 @@ describe('DbAuthentication', () => {
       jest.spyOn(hashComparerStub, 'compare').mockResolvedValueOnce(false);
       const authToken = await sut.authenticate(makeFakeAuthInput());
       expect(authToken).toBeNull();
+    });
+  });
+
+  describe('TokenGenerator', () => {
+    test(' Should call TokenGenerator with correct id', async () => {
+      const { sut, tokenGeneratorStub } = makeSut();
+      const generateSpy = jest.spyOn(tokenGeneratorStub, 'generate');
+      await sut.authenticate(makeFakeAuthInput());
+      expect(generateSpy).toHaveBeenCalledWith('any_id');
     });
   });
 });

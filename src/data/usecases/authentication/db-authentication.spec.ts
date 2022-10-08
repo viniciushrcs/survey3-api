@@ -96,5 +96,14 @@ describe('DbAuthentication', () => {
       await sut.authenticate(makeFakeAuthInput());
       expect(compareSpy).toHaveBeenCalledWith('password', 'wTzVTHQ6');
     });
+
+    test('Should throw if HashComparer throws', async () => {
+      const { sut, hashComparerStub } = makeSut();
+      jest.spyOn(hashComparerStub, 'compare').mockRejectedValueOnce(() => {
+        throw new Error();
+      });
+      const promise = sut.authenticate(makeFakeAuthInput());
+      await expect(promise).rejects.toThrow();
+    });
   });
 });

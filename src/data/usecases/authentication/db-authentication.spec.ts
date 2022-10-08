@@ -1,7 +1,9 @@
 import { DbAuthentication } from './db-authentication';
-import { LoadAccountByEmailRepository } from '../../../protocols/load-account-by-email-repository.ts';
-import { AccountModel } from '../../../../domain/models/account';
-import { AuthenticationModel } from '../../../../domain/usecases/authentication';
+import {
+  AccountModel,
+  AuthenticationModel,
+  LoadAccountByEmailRepository
+} from './db-authentication-protocols';
 
 interface SutTypes {
   loadAccountByEmailRepoStub: LoadAccountByEmailRepository;

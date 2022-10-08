@@ -2,7 +2,7 @@
 // O padrão adapter faz com que apenas uma classe se suje com uma dependência externa
 // e ela tem que se adaptar para se plugar ao seu sistema
 // o adapter faz a adaptação mundo externo -> interface -> mundo interno
-import { Encrypter } from '../../data/protocols/encrypter';
+import { Encrypter } from '../../data/protocols/crypto/encrypter';
 import { hash } from 'bcrypt';
 
 export class BcryptAdapter implements Encrypter {

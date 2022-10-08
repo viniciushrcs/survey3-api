@@ -15,11 +15,11 @@ This project is an Api built with Node, following the principles of Clean Archit
 6. ✅ **Save** a new account for the user
 
 > ### Exceptions
-1. ✅ Returns **400** if fields **name**, **email**, **password** ou **passwordConfirmation** are not in the request
-2. ✅ Returns **400** if password e passwordConfirmation are not equal 
-3. ✅ Returns **400** if email is invalid
-4. ✅ Returns **500** if error occurs while generating the encrypted password
-5. ✅ Returns **500** if error occurs while creating the new account
+1. ❌ Returns **400** if fields **name**, **email**, **password** ou **passwordConfirmation** are not in the request
+2. ❌ Returns **400** if password e passwordConfirmation are not equal 
+3. ❌ Returns **400** if email is invalid
+4. ❌ Returns **500** if error occurs while generating the encrypted password
+5. ❌ Returns **500** if error occurs while creating the new account
 
 
 ### - Login
@@ -33,8 +33,8 @@ This project is an Api built with Node, following the principles of Clean Archit
 7. Returns 200 with the **access token** and **user name**
 
 > ### Exceptions
-1. ✅ Returns **400** if fields **email**, **password** are not in the request
-2. ✅ Returns **400** if email is invalid
-3. ✅ Returns **401** if credentials are invalid
-4. ✅ Returns **500** if error occurs while generating the **access token**
-5. ✅ Returns **500** if error occurs while saving the token
+1. ❌ Returns **400** if fields **email**, **password** are not in the request
+2. ❌ Returns **400** if email is invalid
+3. ❌ Returns **401** if credentials are invalid
+4. ❌ Returns **500** if error occurs while generating the **access token**
+5. ❌ Returns **500** if error occurs while saving the token

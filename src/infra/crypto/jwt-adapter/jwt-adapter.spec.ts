@@ -7,7 +7,7 @@ const makeSut = (): JwtAdapter => {
 };
 jest.mock('jsonwebtoken', () => ({
   sign(): string {
-    return 'hashed';
+    return 'webtoken';
   }
 }));
 
@@ -27,6 +27,12 @@ describe('JwtAdapter', () => {
       });
       const promise = sut.generate('value');
       await expect(promise).rejects.toThrow();
+    });
+
+    test('Should return a new token on success', async () => {
+      const sut = makeSut();
+      const authToken = await sut.generate('any_id');
+      expect(authToken).toBe('webtoken');
     });
   });
 });

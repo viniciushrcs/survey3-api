@@ -91,7 +91,7 @@ describe('Login Controller', () => {
       const httpResponse = await sut.handle(makeFakeRequest());
       expect(httpResponse).toEqual(
         ok({
-          authToken: 'any_token'
+          accessToken: 'any_token'
         })
       );
     });

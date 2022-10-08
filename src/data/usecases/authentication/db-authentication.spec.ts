@@ -57,7 +57,7 @@ const makeHashComparerStub = (): HashComparer => {
 
 const makeUpdateAccessTokenRepositoryStub = (): UpdateAccessTokenRepository => {
   class UpdateAccessTokenRepositoryStub implements UpdateAccessTokenRepository {
-    async updateAccessToken(id: string, authToken: string): Promise<void> {
+    async updateAccessToken(id: string, accessToken: string): Promise<void> {
       return new Promise((resolve) => resolve());
     }
   }
@@ -112,8 +112,8 @@ describe('DbAuthentication', () => {
       jest
         .spyOn(loadAccountByEmailRepoStub, 'loadAccountByEmail')
         .mockReturnValueOnce(null);
-      const authToken = await sut.authenticate(makeFakeAuthInput());
-      expect(authToken).toBeNull();
+      const accessToken = await sut.authenticate(makeFakeAuthInput());
+      expect(accessToken).toBeNull();
     });
   });
 
@@ -137,8 +137,8 @@ describe('DbAuthentication', () => {
     test(' Should return null if comparison fails', async () => {
       const { sut, hashComparerStub } = makeSut();
       jest.spyOn(hashComparerStub, 'compare').mockResolvedValueOnce(false);
-      const authToken = await sut.authenticate(makeFakeAuthInput());
-      expect(authToken).toBeNull();
+      const accessToken = await sut.authenticate(makeFakeAuthInput());
+      expect(accessToken).toBeNull();
     });
   });
 
@@ -159,10 +159,10 @@ describe('DbAuthentication', () => {
       await expect(promise).rejects.toThrow();
     });
 
-    test(' Should return a new authToken on success', async () => {
+    test(' Should return a new accessToken on success', async () => {
       const { sut } = makeSut();
-      const authToken = await sut.authenticate(makeFakeAuthInput());
-      expect(authToken).toBe('any_token');
+      const accessToken = await sut.authenticate(makeFakeAuthInput());
+      expect(accessToken).toBe('any_token');
     });
   });
 

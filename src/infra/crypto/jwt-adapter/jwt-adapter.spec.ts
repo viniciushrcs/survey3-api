@@ -31,8 +31,8 @@ describe('JwtAdapter', () => {
 
     test('Should return a new token on success', async () => {
       const sut = makeSut();
-      const authToken = await sut.generate('any_id');
-      expect(authToken).toBe('webtoken');
+      const accessToken = await sut.generate('any_id');
+      expect(accessToken).toBe('webtoken');
     });
   });
 });

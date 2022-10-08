@@ -2,21 +2,20 @@ import { AddAccountRepository } from '../../../../data/protocols/db/add-account-
 import { AddAccountModel } from '../../../../domain/usecases/add-account';
 import { AccountModel } from '../../../../domain/models/account';
 import { MongoHelper } from '../helpers/mongo-helper';
+import { LoadAccountByEmailRepository } from '../../../../data/protocols/db/load-account-by-email-repository.ts';
 
-export class AccountMongoRepository implements AddAccountRepository {
-  //todo refatorar esse método
+export class AccountMongoRepository
+  implements AddAccountRepository, LoadAccountByEmailRepository
+{
   async add(account: AddAccountModel): Promise<AccountModel> {
     const accountCollection = MongoHelper.getCollection('accounts');
     await accountCollection.insertOne(account);
-    const newAccount = await accountCollection.findOne({
-      email: account.email
-    });
-    const id = newAccount._id.toString();
-    return {
-      id,
-      name: newAccount.name,
-      email: newAccount.email,
-      password: newAccount.password
-    };
+    return await this.loadAccountByEmail(account.email);
+  }
+
+  async loadAccountByEmail(email: string): Promise<AccountModel> {
+    const accountCollection = MongoHelper.getCollection('accounts');
+    const foundAccount = await accountCollection.findOne({ email });
+    return foundAccount && MongoHelper.mapAccount(foundAccount);
   }
 }

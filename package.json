@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "build": "tsc",
     "start": "node dist/main/server.js",
     "dev": "ts-node src/main/server.ts",

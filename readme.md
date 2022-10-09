@@ -22,6 +22,7 @@ This project is an Api built with Node, following the principles of **Clean Arch
 - Composite 
 - Decorator 
 - Dependency Injection
+- Proxy
 
 
 >### Libraries and Frameworks:

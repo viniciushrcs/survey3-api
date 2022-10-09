@@ -3,7 +3,7 @@ import {
   ValidationComposite
 } from '../../../../validation/validators';
 import { Validation } from '../../../../presentation/protocols';
-import { makeAddSurveyValidation } from './survey-validation';
+import { makeAddSurveyValidation } from './add-survey-validation';
 
 jest.mock('../../../../validation/validators/validation-composite');
 

@@ -108,7 +108,15 @@ describe('SignUpController', () => {
     test('Should return 200 if AddAccount is called properly', async () => {
       const { sut } = makeSut();
       const httpResponse = await sut.handle(makeFakeRequest());
-      expect(httpResponse).toEqual(ok(makeFakeAccount()));
+      expect(httpResponse).toEqual(
+        ok({
+          accessToken: 'any_token',
+          email: 'email@email.com',
+          id: 'aa672452-0ca0-468d-b321-f724adab617e',
+          name: 'crash',
+          password: 'mGcMhu6P'
+        })
+      );
     });
   });
 
@@ -151,20 +159,6 @@ describe('SignUpController', () => {
         email: 'email@email.com',
         password: 'mGcMhu6P'
       });
-    });
-
-    test('Should return 200 if valid credentials are provided', async () => {
-      const { sut } = makeSut();
-      const httpResponse = await sut.handle(makeFakeRequest());
-      expect(httpResponse).toEqual(
-        ok({
-          accessToken: 'any_token',
-          email: 'email@email.com',
-          id: 'aa672452-0ca0-468d-b321-f724adab617e',
-          name: 'crash',
-          password: 'mGcMhu6P'
-        })
-      );
     });
   });
 });

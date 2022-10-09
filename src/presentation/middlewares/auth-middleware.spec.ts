@@ -1,4 +1,4 @@
-import { forbidden } from '../helpers/http/http-helper';
+import { forbidden, ok } from '../helpers/http/http-helper';
 import { AccessDeniedError } from '../errors';
 import { AuthMiddleware } from './auth-middleware';
 import { AccountModel } from '../../domain/models/account';
@@ -11,7 +11,7 @@ interface SutTypes {
 }
 
 const makeFakeAccount = (): AccountModel => ({
-  id: 'dcaddfa4-5cc4-4442-ae9e-011fbc64971f',
+  id: 'valid_id',
   name: 'name',
   email: 'email',
   password: 'hashed_password'
@@ -48,19 +48,27 @@ describe('Auth Middleware', () => {
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()));
   });
 
-  test('Should call LoadAccountByToken with correct accessToken', async () => {
-    const { sut, loadAccountByTokenStub } = makeSut();
-    const loadAccountSpy = jest.spyOn(loadAccountByTokenStub, 'loadAccount');
-    await sut.handle(makeFakeRequest());
-    expect(loadAccountSpy).toHaveBeenCalledWith('any_token');
-  });
+  describe('LoadAccountByToken', () => {
+    test('Should call LoadAccountByToken with correct accessToken', async () => {
+      const { sut, loadAccountByTokenStub } = makeSut();
+      const loadAccountSpy = jest.spyOn(loadAccountByTokenStub, 'loadAccount');
+      await sut.handle(makeFakeRequest());
+      expect(loadAccountSpy).toHaveBeenCalledWith('any_token');
+    });
 
-  test('Should return 403 if LoadAccountByToken returns null', async () => {
-    const { sut, loadAccountByTokenStub } = makeSut();
-    jest
-      .spyOn(loadAccountByTokenStub, 'loadAccount')
-      .mockResolvedValueOnce(null);
-    const httpResponse = await sut.handle({});
-    expect(httpResponse).toEqual(forbidden(new AccessDeniedError()));
+    test('Should return 403 if LoadAccountByToken returns null', async () => {
+      const { sut, loadAccountByTokenStub } = makeSut();
+      jest
+        .spyOn(loadAccountByTokenStub, 'loadAccount')
+        .mockResolvedValueOnce(null);
+      const httpResponse = await sut.handle(makeFakeRequest());
+      expect(httpResponse).toEqual(forbidden(new AccessDeniedError()));
+    });
+
+    test('Should return 200 if LoadAccountByToken returns an account', async () => {
+      const { sut } = makeSut();
+      const httpResponse = await sut.handle(makeFakeRequest());
+      expect(httpResponse).toEqual(ok({ accountId: 'valid_id' }));
+    });
   });
 });

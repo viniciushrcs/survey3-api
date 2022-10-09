@@ -122,7 +122,7 @@ describe('Account Mongo Repository', () => {
 
     test('Should return null if loadAccountByEmail fails', async () => {
       const sut = makeSut();
-      const foundAccount = await sut.loadAccountByEmail('any_email@email.com');
+      const foundAccount = await sut.loadAccountByToken('any_token');
       expect(foundAccount).toBeFalsy();
     });
   });

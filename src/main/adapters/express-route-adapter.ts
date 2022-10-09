@@ -6,13 +6,12 @@ import {
 import { Request, Response } from 'express';
 
 export const adaptRoute = (controller: Controller) => {
-  const httpSuccessStatus = 200;
   return async (req: Request, res: Response) => {
     const httpRequest: HttpRequest = {
       body: req.body
     };
     const httpResponse: HttpResponse = await controller.handle(httpRequest);
-    if (httpResponse.statusCode === httpSuccessStatus) {
+    if (httpResponse.statusCode >= 200 && httpResponse.statusCode <= 299) {
       res.status(httpResponse.statusCode).json(httpResponse.body);
     } else {
       res.status(httpResponse.statusCode).json({

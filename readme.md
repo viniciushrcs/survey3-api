@@ -19,7 +19,7 @@ This project is an Api built with Node, following the principles of Clean Archit
 7. Returns 200 with the **access token** and **account data**
 
 > ### Exceptions ❌
-1. Returns **400** if fields **name**, **email**, **password** ou **passwordConfirmation** are not in the request
+1. Returns **400** if fields **name**, **email**, **password** or **passwordConfirmation** are not in the request
 2. Returns **400** if password e passwordConfirmation are not equal 
 3. Returns **400** if email is invalid
 4. Returns **500** if error occurs while generating the encrypted password
@@ -42,3 +42,12 @@ This project is an Api built with Node, following the principles of Clean Archit
 3. Returns **401** if credentials are invalid
 4. Returns **500** if error occurs while generating the **access token**
 5. Returns **500** if error occurs while saving the token
+
+
+### - AddSurvey
+> ### Success cases ✅
+1. Returns 204
+
+> ### Exceptions ❌
+1. Returns **400** if fields **question** or **passwordConfirmation** are not in the request
+2. Returns **500** if error occurs while creating the new survey

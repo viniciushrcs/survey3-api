@@ -5,7 +5,11 @@ import {
   HttpResponse,
   Validation
 } from './add-survey-protocols';
-import { badRequest } from '../../../helpers/http/http-helper';
+import {
+  badRequest,
+  noContent,
+  serverError
+} from '../../../helpers/http/http-helper';
 
 export class AddSurveyController implements Controller {
   constructor(
@@ -13,12 +17,16 @@ export class AddSurveyController implements Controller {
     private readonly addSurvey: AddSurvey
   ) {}
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const validationError = this.validation.validate(httpRequest.body);
-    if (validationError) {
-      return badRequest(validationError);
+    try {
+      const validationError = this.validation.validate(httpRequest.body);
+      if (validationError) {
+        return badRequest(validationError);
+      }
+      const { question, answers } = httpRequest.body;
+      await this.addSurvey.add({ question, answers });
+      return noContent();
+    } catch (e) {
+      return serverError(e);
     }
-    const { question, answers } = httpRequest.body;
-    await this.addSurvey.add({ question, answers });
-    return null;
   }
 }

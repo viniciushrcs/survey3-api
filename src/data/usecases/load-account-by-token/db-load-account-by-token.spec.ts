@@ -1,13 +1,13 @@
 import { DbLoadAccountByToken } from './db-load-account-by-token';
 import {
   AccountModel,
-  Decrypter,
-  LoadAccountByTokenRepository
+  LoadAccountByTokenRepository,
+  TokenVerifier
 } from './db-load-account-by-token-protocols';
 
 interface SutTypes {
   sut: DbLoadAccountByToken;
-  decrypterStub: Decrypter;
+  decrypterStub: TokenVerifier;
   loadAccountByTokenRepositorStub: LoadAccountByTokenRepository;
 }
 
@@ -33,8 +33,8 @@ const makeLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
 };
 
 const makeDecrypterStub = () => {
-  class DecrypterStub implements Decrypter {
-    async decrypt(value: string): Promise<string> {
+  class DecrypterStub implements TokenVerifier {
+    async verify(value: string): Promise<string> {
       return new Promise((resolve) => resolve('any_value'));
     }
   }
@@ -59,21 +59,21 @@ describe('DbLoadAccountByToken UseCase', () => {
   describe('Decrypter', () => {
     test('Should call Decrypter with correct values', async () => {
       const { sut, decrypterStub } = makeSut();
-      const decryptSpy = jest.spyOn(decrypterStub, 'decrypt');
+      const decryptSpy = jest.spyOn(decrypterStub, 'verify');
       await sut.loadAccount('any_token', 'any_role');
       expect(decryptSpy).toHaveBeenCalledWith('any_token');
     });
 
     test('Should return null if Decrypter returns null', async () => {
       const { sut, decrypterStub } = makeSut();
-      jest.spyOn(decrypterStub, 'decrypt').mockResolvedValueOnce(null);
+      jest.spyOn(decrypterStub, 'verify').mockResolvedValueOnce(null);
       const account = await sut.loadAccount('any_token', 'any_role');
       expect(account).toBeNull();
     });
 
     test('Should throw Decrypter throws', async () => {
       const { sut, decrypterStub } = makeSut();
-      jest.spyOn(decrypterStub, 'decrypt').mockRejectedValueOnce(() => {
+      jest.spyOn(decrypterStub, 'verify').mockRejectedValueOnce(() => {
         throw new Error();
       });
       const promise = sut.loadAccount('any_token', 'any_role');

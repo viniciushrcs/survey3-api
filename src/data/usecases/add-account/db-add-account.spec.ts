@@ -5,7 +5,7 @@ import {
   AddAccountRepository,
   Encrypter
 } from './db-add-account-protocols';
-import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository.ts';
+import { LoadAccountByEmailRepository } from '../../protocols/db/account/load-account-by-email-repository.ts';
 
 interface SutTypes {
   sut: DbAddAccount;

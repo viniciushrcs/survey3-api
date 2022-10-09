@@ -1,6 +1,9 @@
 import { ValidationComposite } from './validation-composite';
-import { InvalidParamError, MissingParamError } from '../../errors';
-import { Validation } from '../../protocols';
+import {
+  InvalidParamError,
+  MissingParamError
+} from '../../presentation/errors';
+import { Validation } from '../../presentation/protocols';
 
 interface SutTypes {
   validationStubs: Validation[];

@@ -82,5 +82,11 @@ describe('DbLoadAccountByToken UseCase', () => {
       await sut.loadAccount('any_token', 'any_role');
       expect(decryptSpy).toHaveBeenCalledWith('any_token', 'any_role');
     });
+
+    test('Should return an account on success', async () => {
+      const { sut } = makeSut();
+      const account = await sut.loadAccount('any_token', 'any_role');
+      expect(account).toEqual(makeFakeAccount());
+    });
   });
 });

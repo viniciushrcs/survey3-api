@@ -11,8 +11,12 @@ This project is an Api built with Node, following the principles of Clean Archit
 2. Validate request data: **name**, **email**, **password** and **passwordConfirmation**
 3. Validate that **password** and **passwordConfirmation** are equal
 4. Validate that **email** is a valid email
-5. Generates an **encrypted** password to save in Database
-6. **Save** a new account for the user
+5. Validate if one account already exists with the given **email**
+6. Generates an **encrypted** password to save in Database
+7. **Save** a new account for the user
+8. Generates an **access token**
+6. **Save** the token with the user data
+7. Returns 200 with the **access token** and **account data**
 
 > ### Exceptions ❌
 1. Returns **400** if fields **name**, **email**, **password** ou **passwordConfirmation** are not in the request

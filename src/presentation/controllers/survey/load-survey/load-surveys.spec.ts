@@ -1,6 +1,6 @@
 import { LoadSurveysController } from './load-surveys';
 import { LoadSurveys, SurveyModel } from './load-surveys-protocols';
-import { ok, serverError } from '../../../helpers/http/http-helper';
+import { noContent, ok, serverError } from '../../../helpers/http/http-helper';
 import MockDate from 'mockdate';
 import { ServerError } from '../../../errors';
 
@@ -76,6 +76,13 @@ describe('Load Surveys Controller', () => {
       });
       const httpResponse = await sut.handle({});
       expect(httpResponse).toEqual(serverError(new ServerError(null)));
+    });
+
+    test('Should return 204 if LoadSurveys returns empy', async () => {
+      const { sut, loadSurveysStub } = makeSut();
+      jest.spyOn(loadSurveysStub, 'load').mockResolvedValueOnce([]);
+      const httpResponse = await sut.handle({});
+      expect(httpResponse).toEqual(noContent());
     });
 
     test('Should return 200 on success', async () => {

@@ -1,6 +1,7 @@
 import { LoadSurveysController } from './load-surveys';
-import { LoadSurveys } from '../../../../domain/usecases/load-surveys';
-import { SurveyModel } from '../../../../domain/models/survey';
+import { LoadSurveys, SurveyModel } from './load-surveys-protocols';
+import { ok } from '../../../helpers/http/http-helper';
+import MockDate from 'mockdate';
 
 const makeFakeSurveys = (): SurveyModel[] => [
   {
@@ -33,6 +34,14 @@ interface SutTypes {
 }
 
 describe('Load Surveys Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    MockDate.reset;
+  });
+
   const makeLoadSurveysStub = () => {
     class LoadSurveysStub implements LoadSurveys {
       async load(): Promise<SurveyModel[]> {
@@ -56,5 +65,11 @@ describe('Load Surveys Controller', () => {
     const loadSpy = jest.spyOn(loadSurveysStub, 'load');
     await sut.handle({});
     expect(loadSpy).toHaveBeenCalled();
+  });
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle({});
+    expect(httpResponse).toEqual(ok(makeFakeSurveys()));
   });
 });

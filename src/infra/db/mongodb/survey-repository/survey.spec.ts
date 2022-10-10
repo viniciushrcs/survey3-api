@@ -1,4 +1,4 @@
-import { SurveyMongoRepository } from './add-survey';
+import { SurveyMongoRepository } from './survey';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { Collection } from 'mongodb';
 import { AddSurveyModel } from '../../../../domain/usecases/add-survey';
@@ -14,7 +14,8 @@ const makeAddSurvey = (): AddSurveyModel => ({
     {
       answer: 'any_answer_2'
     }
-  ]
+  ],
+  date: new Date()
 });
 
 describe('Survey Mongo Repository', () => {
@@ -48,6 +49,38 @@ describe('Survey Mongo Repository', () => {
         question: 'any_question'
       });
       expect(surveyAfter).toBeTruthy();
+    });
+  });
+
+  describe('loadAll', () => {
+    test('Should load all surveys on success', async () => {
+      const sut = makeSut();
+      await surveyCollection.insertMany([
+        makeAddSurvey(),
+        {
+          question: 'other_question',
+          answers: [
+            {
+              image: 'other_image',
+              answer: 'other_answer'
+            },
+            {
+              answer: 'other_answer_2'
+            }
+          ],
+          date: new Date()
+        }
+      ]);
+      const surveys = await sut.loadAll();
+      expect(surveys.length).toBe(2);
+      expect(surveys[0].question).toBe('any_question');
+      expect(surveys[1].question).toBe('other_question');
+    });
+
+    test('Should load empty list', async () => {
+      const sut = makeSut();
+      const surveys = await sut.loadAll();
+      expect(surveys.length).toBe(0);
     });
   });
 });

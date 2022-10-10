@@ -1,6 +1,7 @@
 import { DbAddSurvey } from './db-add-survey';
 import { AddSurveyRepository } from '../../../protocols/db/survey/add-survey-repository';
 import { AddSurveyModel } from '../../../../domain/usecases/add-survey';
+import MockDate from 'mockdate';
 
 interface SutTypes {
   sut: DbAddSurvey;
@@ -14,7 +15,8 @@ const makeAddSurvey = (): AddSurveyModel => ({
       image: 'any_image',
       answer: 'any_answer'
     }
-  ]
+  ],
+  date: new Date()
 });
 
 const makeAddSurveyRepository = (): AddSurveyRepository => {
@@ -36,6 +38,14 @@ const makeSut = (): SutTypes => {
 };
 
 describe('DbAddSurvey UseCase', () => {
+  beforeAll(() => {
+    MockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    MockDate.reset;
+  });
+
   describe('AddSurvey Repository', () => {
     test('Should call AddSurveyRepository with correct values', async () => {
       const { sut, addSurveyRepositoryStub } = makeSut();
@@ -48,7 +58,8 @@ describe('DbAddSurvey UseCase', () => {
             image: 'any_image',
             answer: 'any_answer'
           }
-        ]
+        ],
+        date: new Date()
       });
     });
 

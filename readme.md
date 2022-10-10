@@ -2,10 +2,11 @@
 
 This project is an Api built with Node, following the principles of **Clean Architecture** and respecting **TDD** practices during the development.
 
-> ### List of routes:
+> ### List of operations:
  - [SignUp](./docs/signup.md)
  - [Login](./docs/login.md)
- - [AddSurvey](./docs/add-survey.md)
+ -  [AddSurvey](./docs/add-survey.md)
+ -  [LoadSurvey](./docs/load-survey.md)
 
 > ### Principles followed:
 - SOLID 

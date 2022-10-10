@@ -51,4 +51,30 @@ describe('Survey Mongo Repository', () => {
       expect(surveyAfter).toBeTruthy();
     });
   });
+
+  describe('loadAll', () => {
+    test('Should load all surveys on success', async () => {
+      const sut = makeSut();
+      await surveyCollection.insertMany([
+        makeAddSurvey(),
+        {
+          question: 'other_question',
+          answers: [
+            {
+              image: 'other_image',
+              answer: 'other_answer'
+            },
+            {
+              answer: 'other_answer_2'
+            }
+          ],
+          date: new Date()
+        }
+      ]);
+      const surveys = await sut.loadAll();
+      expect(surveys.length).toBe(2);
+      expect(surveys[0].question).toBe('any_question');
+      expect(surveys[1].question).toBe('other_question');
+    });
+  });
 });

@@ -1,5 +1,6 @@
 import { Collection, MongoClient } from 'mongodb';
 import { AccountModel } from '../../../../domain/models/account';
+import { SurveyModel } from '../../../../domain/models/survey';
 
 export const MongoHelper = {
   client: null as MongoClient,
@@ -17,6 +18,11 @@ export const MongoHelper = {
   },
 
   mapAccount(collection: any): AccountModel {
+    const { _id, ...collectionWithoutId } = collection;
+    return Object.assign({}, collectionWithoutId, { id: _id });
+  },
+
+  mapSurvey(collection: any): SurveyModel {
     const { _id, ...collectionWithoutId } = collection;
     return Object.assign({}, collectionWithoutId, { id: _id });
   }

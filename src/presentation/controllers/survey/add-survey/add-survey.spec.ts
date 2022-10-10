@@ -11,6 +11,7 @@ import {
   noContent,
   serverError
 } from '../../../helpers/http/http-helper';
+import MockDate from 'mockdate';
 
 interface SutTypes {
   sut: AddSurveyController;
@@ -35,7 +36,8 @@ const makeFakeRequest = (): HttpRequest => ({
         image: 'any_image',
         answer: 'any_answer'
       }
-    ]
+    ],
+    date: new Date()
   }
 });
 
@@ -60,6 +62,14 @@ const makeSut = (): SutTypes => {
 };
 
 describe('AddSurvey Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    MockDate.reset;
+  });
+
   describe('AddSurvey', () => {
     test('Should call AddSurvey with correct values', async () => {
       const { sut, addSurveyStub } = makeSut();

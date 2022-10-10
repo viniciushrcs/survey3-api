@@ -14,7 +14,8 @@ const makeAddSurvey = (): AddSurveyModel => ({
     {
       answer: 'any_answer_2'
     }
-  ]
+  ],
+  date: new Date()
 });
 
 describe('Survey Mongo Repository', () => {

@@ -14,3 +14,4 @@
 3. Returns **403** if the parameter **survey_id** is invalid
 4. Returns **403** if the **answer** is invalid
 5. Returns **500** if error occurs while creating or updating the new survey result
+6. Returns **500** if error occurs while loading the survey

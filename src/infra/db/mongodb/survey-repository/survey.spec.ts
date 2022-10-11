@@ -2,6 +2,7 @@ import { SurveyMongoRepository } from './survey';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { Collection } from 'mongodb';
 import { AddSurveyModel } from '../../../../domain/usecases/add-survey';
+import { SaveSurveyResultModel } from '../../../../domain/usecases/save-survey-result';
 
 let surveyCollection: Collection;
 const makeAddSurvey = (): AddSurveyModel => ({
@@ -15,6 +16,13 @@ const makeAddSurvey = (): AddSurveyModel => ({
       answer: 'any_answer_2'
     }
   ],
+  date: new Date()
+});
+
+const makeSaveSurveyResult = (): SaveSurveyResultModel => ({
+  surveyId: 'survey_id',
+  userId: 'user_id',
+  answer: 'any_answer_2',
   date: new Date()
 });
 
@@ -81,6 +89,25 @@ describe('Survey Mongo Repository', () => {
       const sut = makeSut();
       const surveys = await sut.loadAll();
       expect(surveys.length).toBe(0);
+    });
+  });
+
+  describe('loadById', () => {
+    test('Should load one survey by id on success', async () => {
+      const sut = makeSut();
+
+      const surveyBefore = await surveyCollection.findOne({
+        surveyId: 'survey_id'
+      });
+      expect(surveyBefore).toBeFalsy();
+      const savedResult = await surveyCollection.insertOne(
+        makeSaveSurveyResult()
+      );
+      await sut.loadById(MongoHelper.mapSurvey(savedResult).id);
+      const surveyAfter = await surveyCollection.findOne({
+        surveyId: 'survey_id'
+      });
+      expect(surveyAfter).toBeTruthy();
     });
   });
 });

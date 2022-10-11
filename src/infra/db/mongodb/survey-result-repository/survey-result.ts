@@ -23,7 +23,8 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository {
       }
     );
     return (
-      savedSurveyResult && MongoHelper.mapSurveyResult(savedSurveyResult.value)
+      savedSurveyResult &&
+      MongoHelper.map<SurveyResultModel>(savedSurveyResult.value)
     );
   }
 }

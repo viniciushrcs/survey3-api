@@ -60,7 +60,10 @@ const makeSaveSurveyResultStub = (): SaveSurveyResult => {
 const makeSut = (): SutTypes => {
   const saveSurveyResultStub = makeSaveSurveyResultStub();
   const loadSurveyByIdStub = makeLoadSurveyById();
-  const sut = new SaveSurveyResultController(loadSurveyByIdStub);
+  const sut = new SaveSurveyResultController(
+    loadSurveyByIdStub,
+    saveSurveyResultStub
+  );
   return {
     sut,
     saveSurveyResultStub,
@@ -74,7 +77,8 @@ const makeFakeRequest = (): HttpRequest => ({
   },
   body: {
     answer: 'any_answer'
-  }
+  },
+  userId: 'userId'
 });
 
 describe('SaveSurveyResult Controller', () => {
@@ -124,6 +128,20 @@ describe('SaveSurveyResult Controller', () => {
         body: 'wrong_answer'
       });
       expect(response).toEqual(forbidden(new InvalidParamError('answer')));
+    });
+  });
+
+  describe('SaveSurveyResult', () => {
+    test('Should call SaveSurveyResult with correct values', async () => {
+      const { sut, saveSurveyResultStub } = makeSut();
+      const saveSpy = jest.spyOn(saveSurveyResultStub, 'save');
+      await sut.handle(makeFakeRequest());
+      expect(saveSpy).toHaveBeenCalledWith({
+        surveyId: 'any_id',
+        answer: 'any_answer',
+        userId: 'userId',
+        date: new Date()
+      });
     });
   });
 });

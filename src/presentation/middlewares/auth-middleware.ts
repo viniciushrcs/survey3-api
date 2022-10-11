@@ -25,7 +25,7 @@ export class AuthMiddleware implements Middleware {
       }
 
       if (account) {
-        return ok({ accountId: account.id });
+        return ok({ userId: account.id });
       }
 
       return forbidden(new AccessDeniedError());

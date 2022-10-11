@@ -16,7 +16,7 @@ import {
 import {
   Authentication,
   AuthenticationModel
-} from '../../../domain/usecases/authentication';
+} from '../../../domain/usecases/account/authentication';
 
 interface SutTypes {
   sut: SignupController;

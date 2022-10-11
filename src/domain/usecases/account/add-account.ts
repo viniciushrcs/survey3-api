@@ -1,4 +1,4 @@
-import { AccountModel } from '../models/account';
+import { AccountModel } from '../../models/account';
 
 // esse protocolo é específico somente dessa rota
 // nem precisa de outro arquivo

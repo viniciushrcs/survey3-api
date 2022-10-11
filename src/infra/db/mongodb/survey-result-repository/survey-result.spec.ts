@@ -1,7 +1,7 @@
 import { SurveyResultMongoRepository } from './survey-result';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { Collection } from 'mongodb';
-import { SaveSurveyResultModel } from '../../../../domain/usecases/save-survey-result';
+import { SaveSurveyResultModel } from '../../../../domain/usecases/survey-result/save-survey-result';
 
 let surveyResultCollection: Collection;
 let surveyCollection: Collection;

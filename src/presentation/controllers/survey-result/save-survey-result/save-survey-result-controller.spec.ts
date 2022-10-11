@@ -8,8 +8,8 @@ import {
   SurveyResultModel
 } from './save-survey-result-controller-protocols';
 import MockDate from 'mockdate';
-import { forbidden } from '../../../helpers/http/http-helper';
-import { InvalidParamError } from '../../../errors';
+import { forbidden, serverError } from '../../../helpers/http/http-helper';
+import { InvalidParamError, ServerError } from '../../../errors';
 
 interface SutTypes {
   sut: SaveSurveyResultController;
@@ -98,5 +98,28 @@ describe('SaveSurveyResult Controller', () => {
 
     const response = await sut.handle(makeFakeRequest());
     expect(response).toEqual(forbidden(new InvalidParamError('surveyId')));
+  });
+
+  test('Should return 500 if LoadSurveyById throws', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut();
+    jest
+      .spyOn(loadSurveyByIdStub, 'loadById')
+      .mockRejectedValueOnce(async () => {
+        throw new Error();
+      });
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(serverError(new ServerError(null)));
+  });
+
+  describe('Param validation', () => {
+    test('Answer', () => {
+      test('Should return 403 if an invalid answer is provided', async () => {
+        const { sut } = makeSut();
+        const response = await sut.handle({
+          body: 'wrong_answer'
+        });
+        expect(response).toEqual(forbidden(new InvalidParamError('answer')));
+      });
+    });
   });
 });

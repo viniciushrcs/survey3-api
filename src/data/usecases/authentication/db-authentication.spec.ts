@@ -1,7 +1,7 @@
 import { DbAuthentication } from './db-authentication';
 import {
   AccountModel,
-  AuthenticationModel,
+  AuthenticationParams,
   HashComparer,
   LoadAccountByEmailRepository,
   TokenGenerator,
@@ -23,7 +23,7 @@ const makeFakeAccount = (): AccountModel => ({
   password: 'wTzVTHQ6'
 });
 
-const makeFakeAuthInput = (): AuthenticationModel => ({
+const makeFakeAuthInput = (): AuthenticationParams => ({
   email: 'email@email.com',
   password: 'password'
 });
@@ -31,7 +31,7 @@ const makeFakeAuthInput = (): AuthenticationModel => ({
 const makeLoadAccountByEmailRepoStub = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepoStub implements LoadAccountByEmailRepository {
     async loadAccountByEmail(email: string): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(makeFakeAccount()));
+      return Promise.resolve(makeFakeAccount());
     }
   }
   return new LoadAccountByEmailRepoStub();
@@ -40,7 +40,7 @@ const makeLoadAccountByEmailRepoStub = (): LoadAccountByEmailRepository => {
 const makeTokenGeneratorStub = (): TokenGenerator => {
   class TokenGeneratorStub implements TokenGenerator {
     async generate(id: string): Promise<string> {
-      return new Promise((resolve) => resolve('any_token'));
+      return Promise.resolve('any_token');
     }
   }
   return new TokenGeneratorStub();
@@ -49,7 +49,7 @@ const makeTokenGeneratorStub = (): TokenGenerator => {
 const makeHashComparerStub = (): HashComparer => {
   class HashComparerStub implements HashComparer {
     async compare(value: string, hash: string): Promise<boolean> {
-      return new Promise((resolve) => resolve(true));
+      return Promise.resolve(true);
     }
   }
   return new HashComparerStub();
@@ -58,7 +58,7 @@ const makeHashComparerStub = (): HashComparer => {
 const makeUpdateAccessTokenRepositoryStub = (): UpdateAccessTokenRepository => {
   class UpdateAccessTokenRepositoryStub implements UpdateAccessTokenRepository {
     async updateAccessToken(id: string, accessToken: string): Promise<void> {
-      return new Promise((resolve) => resolve());
+      return Promise.resolve();
     }
   }
   return new UpdateAccessTokenRepositoryStub();

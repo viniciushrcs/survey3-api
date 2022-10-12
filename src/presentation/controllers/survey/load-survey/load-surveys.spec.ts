@@ -46,7 +46,7 @@ describe('Load Surveys Controller', () => {
   const makeLoadSurveysStub = () => {
     class LoadSurveysStub implements LoadSurveys {
       async load(): Promise<SurveyModel[]> {
-        return new Promise((resolve) => resolve(makeFakeSurveys()));
+        return Promise.resolve(makeFakeSurveys());
       }
     }
     return new LoadSurveysStub();

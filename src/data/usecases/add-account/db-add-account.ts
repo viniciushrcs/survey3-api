@@ -1,7 +1,7 @@
 import {
   AccountModel,
   AddAccount,
-  AddAccountModel,
+  AddAccountParams,
   AddAccountRepository,
   Encrypter,
   LoadAccountByEmailRepository
@@ -13,7 +13,7 @@ export class DbAddAccount implements AddAccount {
     private readonly addAccountRepository: AddAccountRepository,
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository
   ) {}
-  async add(account: AddAccountModel): Promise<AccountModel> {
+  async add(account: AddAccountParams): Promise<AccountModel> {
     const hasAlreadyAccount =
       await this.loadAccountByEmailRepository.loadAccountByEmail(account.email);
     if (hasAlreadyAccount) {

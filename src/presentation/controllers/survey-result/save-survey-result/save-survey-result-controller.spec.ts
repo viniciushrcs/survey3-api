@@ -3,7 +3,7 @@ import {
   HttpRequest,
   LoadSurveyById,
   SaveSurveyResult,
-  SaveSurveyResultModel,
+  SaveSurveyResultParams,
   SurveyModel,
   SurveyResultModel
 } from './save-survey-result-controller-protocols';
@@ -40,7 +40,7 @@ interface SutTypes {
 const makeLoadSurveyById = (): LoadSurveyById => {
   class LoadSurveyByIdStub implements LoadSurveyById {
     loadById(id: string): Promise<SurveyModel> {
-      return new Promise((resolve) => resolve(makeFakeSurvey()));
+      return Promise.resolve(makeFakeSurvey());
     }
   }
   return new LoadSurveyByIdStub();
@@ -49,9 +49,9 @@ const makeLoadSurveyById = (): LoadSurveyById => {
 const makeSaveSurveyResultStub = (): SaveSurveyResult => {
   class SaveSurveyResultStub implements SaveSurveyResult {
     async save(
-      surveyResult: SaveSurveyResultModel
+      surveyResult: SaveSurveyResultParams
     ): Promise<SurveyResultModel> {
-      return new Promise((resolve) => resolve(makeSurveyResult()));
+      return Promise.resolve(makeSurveyResult());
     }
   }
   return new SaveSurveyResultStub();

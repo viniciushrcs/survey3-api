@@ -33,7 +33,7 @@ const makeFakeSurveys = (): SurveyModel[] => [
 const makeLoadSurveyRepositoryStub = () => {
   class LoadSurveyRepositoryStub implements LoadSurveysRepository {
     async loadAll(): Promise<SurveyModel[]> {
-      return new Promise((resolve) => resolve(makeFakeSurveys()));
+      return Promise.resolve(makeFakeSurveys());
     }
   }
   return new LoadSurveyRepositoryStub();

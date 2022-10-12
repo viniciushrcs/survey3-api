@@ -7,7 +7,7 @@ import {
 import { LoginController } from './login';
 import {
   Authentication,
-  AuthenticationModel,
+  AuthenticationParams,
   HttpRequest
 } from './login-protocols';
 import { MissingParamError } from '../../errors';
@@ -21,8 +21,8 @@ interface SutTypes {
 
 const makeAuthenticationStub = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async authenticate(authentication: AuthenticationModel): Promise<string> {
-      return new Promise((resolve) => resolve('any_token'));
+    async authenticate(authentication: AuthenticationParams): Promise<string> {
+      return Promise.resolve('any_token');
     }
   }
   return new AuthenticationStub();

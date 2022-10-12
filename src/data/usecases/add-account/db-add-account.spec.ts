@@ -1,7 +1,7 @@
 import { DbAddAccount } from './db-add-account';
 import {
   AccountModel,
-  AddAccountModel,
+  AddAccountParams,
   AddAccountRepository,
   Encrypter
 } from './db-add-account-protocols';
@@ -21,7 +21,7 @@ const makeFakeAccount = (): AccountModel => ({
   password: 'hashed_password'
 });
 
-const makeAddAccount = (): AddAccountModel => ({
+const makeAddAccount = (): AddAccountParams => ({
   name: 'name',
   email: 'email@email.com',
   password: 'password'
@@ -29,8 +29,8 @@ const makeAddAccount = (): AddAccountModel => ({
 
 const makeAddAccountRepository = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
-    async add(accountData: AddAccountModel): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(makeFakeAccount()));
+    async add(accountData: AddAccountParams): Promise<AccountModel> {
+      return Promise.resolve(makeFakeAccount());
     }
   }
   return new AddAccountRepositoryStub();
@@ -39,7 +39,7 @@ const makeAddAccountRepository = (): AddAccountRepository => {
 const makeLoadAccountByEmailRepoStub = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepoStub implements LoadAccountByEmailRepository {
     async loadAccountByEmail(email: string): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(null));
+      return Promise.resolve(null);
     }
   }
   return new LoadAccountByEmailRepoStub();
@@ -48,7 +48,7 @@ const makeLoadAccountByEmailRepoStub = (): LoadAccountByEmailRepository => {
 const makeEncrypterStub = (): Encrypter => {
   class EncrypterStub implements Encrypter {
     async encrypt(value: string): Promise<string> {
-      return new Promise((resolve) => resolve('hashed_password'));
+      return Promise.resolve('hashed_password');
     }
   }
   return new EncrypterStub();

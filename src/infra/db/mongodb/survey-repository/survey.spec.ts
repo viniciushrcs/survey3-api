@@ -88,7 +88,10 @@ describe('Survey Mongo Repository', () => {
   describe('loadById', () => {
     test('Should load one survey by id on success', async () => {
       const sut = makeSut();
-      const savedResult = await surveyCollection.insertOne(makeAddSurvey());
+      await surveyCollection.insertOne(makeAddSurvey());
+      const savedResult = await surveyCollection.findOne({
+        question: 'any_question'
+      });
       const survey = await sut.loadById(
         MongoHelper.map<SurveyModel>(savedResult).id
       );

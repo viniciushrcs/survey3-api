@@ -1,0 +1,42 @@
+export const loginPath = {
+  post: {
+    tags: ['Login'],
+    summary: 'Route used to authenticate the user',
+    description:
+      'Route used to a registered user aiming to authenticate him or herself',
+    requestBody: {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/schemas/loginParams'
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        description: 'Success',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/schemas/account'
+            }
+          }
+        }
+      },
+      400: {
+        $ref: '#/components/badRequest'
+      },
+      401: {
+        $ref: '#/components/unauthorized'
+      },
+      404: {
+        $ref: '#/components/notFound'
+      },
+      500: {
+        $ref: '#/components/serverError'
+      }
+    }
+  }
+};

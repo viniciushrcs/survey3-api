@@ -94,6 +94,8 @@ describe('SurveyResult Mongo Repository', () => {
       );
       expect(savedSurveyResult.answers[0].count).toBe(1);
       expect(savedSurveyResult.answers[0].percent).toBe(100);
+      expect(savedSurveyResult.answers[1].percent).toBe(0);
+      expect(savedSurveyResult.answers[1].percent).toBe(0);
     });
 
     test('Should update a survey result on success', async () => {
@@ -116,6 +118,8 @@ describe('SurveyResult Mongo Repository', () => {
       );
       expect(savedSurveyResult.answers[0].count).toBe(1);
       expect(savedSurveyResult.answers[0].percent).toBe(100);
+      expect(savedSurveyResult.answers[1].count).toBe(0);
+      expect(savedSurveyResult.answers[1].percent).toBe(0);
     });
   });
 });

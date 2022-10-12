@@ -1,7 +1,7 @@
 import { SurveyResultMongoRepository } from './survey-result';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { Collection } from 'mongodb';
-import { SaveSurveyResultModel } from '../../../../domain/usecases/survey-result/save-survey-result';
+import { SaveSurveyResultParams } from '../../../../domain/usecases/survey-result/save-survey-result';
 
 let surveyResultCollection: Collection;
 let surveyCollection: Collection;
@@ -11,7 +11,7 @@ const makeSaveSurveyResult = (
   id: string,
   answer: string,
   userId: string
-): SaveSurveyResultModel => ({
+): SaveSurveyResultParams => ({
   surveyId: id,
   userId,
   answer,

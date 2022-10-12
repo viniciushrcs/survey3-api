@@ -1,6 +1,6 @@
 import {
   Authentication,
-  AuthenticationModel,
+  AuthenticationParams,
   HashComparer,
   LoadAccountByEmailRepository,
   TokenGenerator,
@@ -14,7 +14,7 @@ export class DbAuthentication implements Authentication {
     private readonly tokenGenerator: TokenGenerator,
     private readonly updateAccessTokenRepository: UpdateAccessTokenRepository
   ) {}
-  async authenticate(authentication: AuthenticationModel): Promise<string> {
+  async authenticate(authentication: AuthenticationParams): Promise<string> {
     let accessToken = null;
     let isPasswordValid = false;
 

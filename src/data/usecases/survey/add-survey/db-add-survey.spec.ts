@@ -1,6 +1,6 @@
 import { DbAddSurvey } from './db-add-survey';
 import { AddSurveyRepository } from '../../../protocols/db/survey/add-survey-repository';
-import { AddSurveyModel } from '../../../../domain/usecases/survey/add-survey';
+import { AddSurveyParams } from '../../../../domain/usecases/survey/add-survey';
 import MockDate from 'mockdate';
 
 interface SutTypes {
@@ -8,7 +8,7 @@ interface SutTypes {
   addSurveyRepositoryStub: AddSurveyRepository;
 }
 
-const makeAddSurvey = (): AddSurveyModel => ({
+const makeAddSurvey = (): AddSurveyParams => ({
   question: 'any_question',
   answers: [
     {
@@ -21,7 +21,7 @@ const makeAddSurvey = (): AddSurveyModel => ({
 
 const makeAddSurveyRepository = (): AddSurveyRepository => {
   class AddSurveyRepositoryStub implements AddSurveyRepository {
-    async add(survey: AddSurveyModel): Promise<void> {
+    async add(survey: AddSurveyParams): Promise<void> {
       return Promise.resolve();
     }
   }

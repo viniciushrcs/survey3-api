@@ -1,7 +1,7 @@
 import { AddSurveyController } from './add-survey-controller';
 import {
   AddSurvey,
-  AddSurveyModel,
+  AddSurveyParams,
   HttpRequest,
   Validation
 } from './add-survey-protocols';
@@ -21,7 +21,7 @@ interface SutTypes {
 
 const makeAddSurvey = (): AddSurvey => {
   class AddSurveyStub implements AddSurvey {
-    async add(survey: AddSurveyModel): Promise<void> {
+    async add(survey: AddSurveyParams): Promise<void> {
       return Promise.resolve();
     }
   }

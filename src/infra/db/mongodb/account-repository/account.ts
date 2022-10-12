@@ -1,5 +1,5 @@
 import { AddAccountRepository } from '../../../../data/protocols/db/account/add-account-repository';
-import { AddAccountModel } from '../../../../domain/usecases/add-account';
+import { AddAccountModel } from '../../../../domain/usecases/account/add-account';
 import { AccountModel } from '../../../../domain/models/account';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { LoadAccountByEmailRepository } from '../../../../data/protocols/db/account/load-account-by-email-repository.ts';
@@ -22,7 +22,7 @@ export class AccountMongoRepository
   async loadAccountByEmail(email: string): Promise<AccountModel> {
     const accountCollection = MongoHelper.getCollection('accounts');
     const foundAccount = await accountCollection.findOne({ email });
-    return foundAccount && MongoHelper.mapAccount(foundAccount);
+    return foundAccount && MongoHelper.map<AccountModel>(foundAccount);
   }
 
   async updateAccessToken(id: string, accessToken: string): Promise<void> {
@@ -53,6 +53,6 @@ export class AccountMongoRepository
         }
       ]
     });
-    return foundAccount && MongoHelper.mapAccount(foundAccount);
+    return foundAccount && MongoHelper.map<AccountModel>(foundAccount);
   }
 }

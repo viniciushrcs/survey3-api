@@ -3,7 +3,11 @@
     "outDir": "dist",
     "module": "CommonJS",
     "target": "ES2019",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": [
+      "@types",
+      "node_modules/@types"
+    ]
   },
   "include": [
     "src"

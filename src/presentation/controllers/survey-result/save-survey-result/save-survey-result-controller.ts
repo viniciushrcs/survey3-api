@@ -20,7 +20,10 @@ export class SaveSurveyResultController implements Controller {
         body: { answer },
         userId
       } = httpRequest;
+      console.log('OI');
       const survey = await this.loadSurveyById.loadById(surveyId);
+      console.log(survey);
+
       if (survey) {
         const answers = survey.answers.map((answer) => answer.answer);
         const isAnswerValid = answers.includes(answer);

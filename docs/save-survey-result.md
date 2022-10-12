@@ -1,6 +1,6 @@
 ### - SaveSurveyResult
 > ### Success cases ✅
-1. Receive a **POST** request on route **/api/surveys/{surveyId}/results**
+1. Receive a **PUT** request on route **/api/surveys/{surveyId}/results**
 2. Validate if request was made by an **user** authenticated
 3. Validate if the parameter **survey_id** is present
 4. Validate if the field **answer** is valid

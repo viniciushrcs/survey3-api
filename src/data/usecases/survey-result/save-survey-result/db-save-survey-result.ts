@@ -1,4 +1,5 @@
 import {
+  LoadSurveyResultRepository,
   SaveSurveyResult,
   SaveSurveyResultParams,
   SaveSurveyResultRepository,
@@ -7,9 +8,13 @@ import {
 
 export class DbSaveSurveyResult implements SaveSurveyResult {
   constructor(
-    private readonly saveSurveyResultRepository: SaveSurveyResultRepository
+    private readonly saveSurveyResultRepository: SaveSurveyResultRepository,
+    private readonly loadSurveyResultRepository: LoadSurveyResultRepository
   ) {}
   async save(survey: SaveSurveyResultParams): Promise<SurveyResultModel> {
-    return await this.saveSurveyResultRepository.save(survey);
+    await this.saveSurveyResultRepository.save(survey);
+    return await this.loadSurveyResultRepository.loadBySurveyId(
+      survey.surveyId
+    );
   }
 }

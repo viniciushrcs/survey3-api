@@ -8,7 +8,7 @@ import { LoadSurveyResultRepository } from '../../../../data/protocols/db/survey
 export class SurveyResultMongoRepository
   implements SaveSurveyResultRepository, LoadSurveyResultRepository
 {
-  async save(surveyResult: SaveSurveyResultParams): Promise<SurveyResultModel> {
+  async save(surveyResult: SaveSurveyResultParams): Promise<void> {
     const surveyResultCollection = MongoHelper.getCollection('surveyResults');
     await surveyResultCollection.findOneAndUpdate(
       {
@@ -25,7 +25,6 @@ export class SurveyResultMongoRepository
         upsert: true
       }
     );
-    return await this.loadBySurveyId(surveyResult.surveyId);
   }
 
   async loadBySurveyId(surveyId: string): Promise<SurveyResultModel> {

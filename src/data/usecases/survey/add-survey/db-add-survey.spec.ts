@@ -22,7 +22,7 @@ const makeAddSurvey = (): AddSurveyModel => ({
 const makeAddSurveyRepository = (): AddSurveyRepository => {
   class AddSurveyRepositoryStub implements AddSurveyRepository {
     async add(survey: AddSurveyModel): Promise<void> {
-      return new Promise((resolve) => resolve());
+      return Promise.resolve();
     }
   }
   return new AddSurveyRepositoryStub();

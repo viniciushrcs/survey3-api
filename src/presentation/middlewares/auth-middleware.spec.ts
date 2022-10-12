@@ -28,7 +28,7 @@ const makeFakeRequest = (): HttpRequest => ({
 const makeLoadAccountByTokenStub = () => {
   class LoadAccountByTokenStub implements LoadAccountByToken {
     async loadAccount(accessToken: string): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(makeFakeAccount()));
+      return Promise.resolve(makeFakeAccount());
     }
   }
   return new LoadAccountByTokenStub();

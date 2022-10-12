@@ -40,7 +40,7 @@ interface SutTypes {
 const makeLoadSurveyById = (): LoadSurveyById => {
   class LoadSurveyByIdStub implements LoadSurveyById {
     loadById(id: string): Promise<SurveyModel> {
-      return new Promise((resolve) => resolve(makeFakeSurvey()));
+      return Promise.resolve(makeFakeSurvey());
     }
   }
   return new LoadSurveyByIdStub();
@@ -51,7 +51,7 @@ const makeSaveSurveyResultStub = (): SaveSurveyResult => {
     async save(
       surveyResult: SaveSurveyResultModel
     ): Promise<SurveyResultModel> {
-      return new Promise((resolve) => resolve(makeSurveyResult()));
+      return Promise.resolve(makeSurveyResult());
     }
   }
   return new SaveSurveyResultStub();

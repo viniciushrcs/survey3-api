@@ -17,7 +17,7 @@ interface SutTypes {
 const makeControllerStub = () => {
   class ControllerStub implements Controller {
     handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-      return new Promise((resolve) => resolve(ok(makeFakeAccount())));
+      return Promise.resolve(ok(makeFakeAccount()));
     }
   }
   return new ControllerStub();
@@ -26,7 +26,7 @@ const makeControllerStub = () => {
 const makeLoggerRepoStub = (): LogErrorRepository => {
   class LoggerRepositoryStub implements LogErrorRepository {
     async logError(stack: string): Promise<void> {
-      return new Promise((resolve) => resolve());
+      return Promise.resolve();
     }
   }
   return new LoggerRepositoryStub();
@@ -65,7 +65,7 @@ const makeServerError = (): HttpResponse => {
   return serverError(fakeError);
 };
 
-describe('LoggerDeccorator', () => {
+describe('LoggerDecorator', () => {
   test('Should call controller handle properly', async () => {
     const { sut, controllerStub } = makeSut();
     const handleSpy = jest.spyOn(controllerStub, 'handle');

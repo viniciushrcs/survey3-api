@@ -22,7 +22,7 @@ interface SutTypes {
 const makeAddSurvey = (): AddSurvey => {
   class AddSurveyStub implements AddSurvey {
     async add(survey: AddSurveyModel): Promise<void> {
-      return new Promise((resolve) => resolve());
+      return Promise.resolve();
     }
   }
   return new AddSurveyStub();

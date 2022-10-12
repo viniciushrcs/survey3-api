@@ -26,7 +26,7 @@ const makeLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
       token: string,
       role?: string
     ): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(makeFakeAccount()));
+      return Promise.resolve(makeFakeAccount());
     }
   }
   return new LoadAccountByTokenRepositoryStub();
@@ -35,7 +35,7 @@ const makeLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
 const makeDecrypterStub = () => {
   class DecrypterStub implements TokenVerifier {
     async verify(value: string): Promise<string> {
-      return new Promise((resolve) => resolve('any_value'));
+      return Promise.resolve('any_value');
     }
   }
   return new DecrypterStub();

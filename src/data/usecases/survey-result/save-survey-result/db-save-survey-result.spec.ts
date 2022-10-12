@@ -26,7 +26,7 @@ const makeSaveSurveyResultModel = (): SaveSurveyResultModel => ({
 const makeSaveSurveyResultRepository = (): SaveSurveyResultRepository => {
   class SaveSurveyResultRepositoryStub implements SaveSurveyResultRepository {
     async save(survey: SaveSurveyResultModel): Promise<SurveyResultModel> {
-      return new Promise((resolve) => resolve(makeSurveyResultModel()));
+      return Promise.resolve(makeSurveyResultModel());
     }
   }
   return new SaveSurveyResultRepositoryStub();

@@ -22,7 +22,7 @@ interface SutTypes {
 const makeAuthenticationStub = (): Authentication => {
   class AuthenticationStub implements Authentication {
     async authenticate(authentication: AuthenticationModel): Promise<string> {
-      return new Promise((resolve) => resolve('any_token'));
+      return Promise.resolve('any_token');
     }
   }
   return new AuthenticationStub();

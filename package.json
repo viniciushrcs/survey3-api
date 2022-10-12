@@ -7,7 +7,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "build": "tsc",
-    "start": "node dist/main/server.js",
+    "start": "node dist/src/main/server.js",
     "dev": "ts-node src/main/server.ts",
     "dev:dev": "nodemon --watch 'src/' --exec 'ts-node src/main/server.ts' -e ts"
   },

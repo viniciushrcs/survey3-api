@@ -12,10 +12,16 @@ import { forbidden, ok, serverError } from '../../../helpers/http/http-helper';
 import { InvalidParamError, ServerError } from '../../../errors';
 
 const makeSurveyResult = (): SurveyResultModel => ({
-  id: 'any_id',
-  surveyId: 'survey_id',
-  userId: 'user_id',
-  answer: 'any_answer',
+  surveyId: 'any_survey_id',
+  question: 'any_question',
+  answers: [
+    {
+      image: 'any_image',
+      answer: 'any_answer',
+      count: 1,
+      percent: 10
+    }
+  ],
   date: new Date()
 });
 

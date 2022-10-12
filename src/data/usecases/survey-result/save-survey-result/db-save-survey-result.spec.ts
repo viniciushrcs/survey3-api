@@ -12,8 +12,17 @@ interface SutTypes {
 }
 
 const makeSurveyResultModel = (): SurveyResultModel => ({
-  ...makeSaveSurveyResultModel(),
-  id: 'any_id'
+  surveyId: 'any_survey_id',
+  question: 'any_question',
+  answers: [
+    {
+      image: 'any_image',
+      answer: 'any_answer',
+      count: 1,
+      percent: 10
+    }
+  ],
+  date: new Date()
 });
 
 const makeSaveSurveyResultModel = (): SaveSurveyResultParams => ({

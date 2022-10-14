@@ -14,7 +14,7 @@ interface SutTypes {
 }
 
 const makeFakeSurvey = (): SurveyModel => ({
-  id: 'any_id',
+  id: 'any_survey_id',
   question: 'any_question',
   answers: [
     {
@@ -34,6 +34,20 @@ const makeSaveSurveyResultModel = (): SurveyResultModel => ({
       answer: 'any_answer',
       count: 1,
       percent: 10
+    }
+  ],
+  date: new Date()
+});
+
+const makeSaveSurveyEmptyResultModel = (): SurveyResultModel => ({
+  surveyId: 'any_survey_id',
+  question: 'any_question',
+  answers: [
+    {
+      image: 'any_image',
+      answer: 'any_answer',
+      count: 0,
+      percent: 0
     }
   ],
   date: new Date()
@@ -111,6 +125,15 @@ describe('LoadSurveyResult UseCase', () => {
       const loadByIdSpy = jest.spyOn(loadSurveyByIdRepository, 'loadById');
       await sut.load('any_survey_id');
       expect(loadByIdSpy).toHaveBeenCalledWith('any_survey_id');
+    });
+
+    test('Should return all surveys with count 0 if LoadSurveyResult returns null', async () => {
+      const { sut, loadSurveyResultRepository } = makeSut();
+      jest
+        .spyOn(loadSurveyResultRepository, 'loadBySurveyId')
+        .mockResolvedValueOnce(null);
+      const surveyResult = await sut.load('any_survey_id');
+      expect(surveyResult).toEqual(makeSaveSurveyEmptyResultModel());
     });
 
     test('Should return surveyResultModel on success', async () => {

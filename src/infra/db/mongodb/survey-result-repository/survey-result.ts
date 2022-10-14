@@ -187,7 +187,7 @@ export class SurveyResultMongoRepository
         answers: '$answers'
       })
       .build();
-    const [surveyResult = []] = await surveyResultCollection
+    const [surveyResult = null] = await surveyResultCollection
       .aggregate(query)
       .toArray();
 

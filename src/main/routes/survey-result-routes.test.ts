@@ -7,6 +7,29 @@ import env from '../config/env';
 
 let accountCollection: Collection;
 let surveyCollection: Collection;
+
+const makeAccessToken = async (): Promise<string> => {
+  const res = await accountCollection.insertOne({
+    name: 'name',
+    email: 'email@email.com',
+    password: '123',
+    role: 'admin'
+  });
+  const id = res.insertedId;
+  const accessToken = sign({ id }, env.secret);
+  await accountCollection.updateOne(
+    {
+      name: 'name'
+    },
+    {
+      $set: {
+        accessToken
+      }
+    }
+  );
+  return accessToken;
+};
+
 describe('SurveyResult Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
@@ -34,24 +57,7 @@ describe('SurveyResult Routes', () => {
     });
 
     test('Should return 200 on save survey result with accessToken', async () => {
-      const res = await accountCollection.insertOne({
-        name: 'name',
-        email: 'email@email.com',
-        password: '123',
-        role: 'admin'
-      });
-      const id = res.insertedId;
-      const accessToken = sign({ id }, env.secret);
-      await accountCollection.updateOne(
-        {
-          name: 'name'
-        },
-        {
-          $set: {
-            accessToken
-          }
-        }
-      );
+      const accessToken = await makeAccessToken();
       const survey = await surveyCollection.insertOne({
         question: 'any_question',
         answers: [
@@ -78,6 +84,28 @@ describe('SurveyResult Routes', () => {
   describe('GET /surveys/:surveyId/results', () => {
     test('Should return 403 on load survey result without accessToken', async () => {
       await request(app).get('/api/surveys/any_id/results').expect(403);
+    });
+
+    test('Should return 200 on load survey result with accessToken', async () => {
+      const accessToken = await makeAccessToken();
+      const res = await surveyCollection.insertOne({
+        question: 'Question',
+        answers: [
+          {
+            answer: 'Answer 1',
+            image: 'http://image-name.com'
+          },
+          {
+            answer: 'Answer 2'
+          }
+        ],
+        date: new Date()
+      });
+
+      await request(app)
+        .get(`/api/surveys/${res.insertedId.toString()}/results`)
+        .set('x-access-token', accessToken)
+        .expect(200);
     });
   });
 });

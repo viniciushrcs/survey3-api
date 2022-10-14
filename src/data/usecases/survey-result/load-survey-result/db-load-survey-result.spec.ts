@@ -1,15 +1,29 @@
 import {
-  LoadSurveyResult,
   LoadSurveyResultRepository,
   SurveyResultModel
 } from './db-load-survey-result-protocols';
 import { DbLoadSurveyResult } from './db-load-survey-result';
 import MockDate from 'mockdate';
+import { LoadSurveyByIdRepository } from '../../../protocols/db/survey/load-survey-by-id-repository';
+import { SurveyModel } from '../../../../domain/models/survey';
 
 interface SutTypes {
-  sut: LoadSurveyResult;
+  sut: DbLoadSurveyResult;
   loadSurveyResultRepository: LoadSurveyResultRepository;
+  loadSurveyByIdRepository: LoadSurveyByIdRepository;
 }
+
+const makeFakeSurvey = (): SurveyModel => ({
+  id: 'any_id',
+  question: 'any_question',
+  answers: [
+    {
+      image: 'any_image',
+      answer: 'any_answer'
+    }
+  ],
+  date: new Date()
+});
 
 const makeSaveSurveyResultModel = (): SurveyResultModel => ({
   surveyId: 'any_survey_id',
@@ -25,6 +39,15 @@ const makeSaveSurveyResultModel = (): SurveyResultModel => ({
   date: new Date()
 });
 
+const makeLoadSurveyByIdRepositoryStub = () => {
+  class LoadSurveyByIdRepositoryStub implements LoadSurveyByIdRepository {
+    async loadById(id: string): Promise<SurveyModel> {
+      return Promise.resolve(makeFakeSurvey());
+    }
+  }
+  return new LoadSurveyByIdRepositoryStub();
+};
+
 const makeLoadSurveyResultRepository = () => {
   class LoadSurveyResultRepositoryStub implements LoadSurveyResultRepository {
     loadBySurveyId(surveyId: string): Promise<SurveyResultModel> {
@@ -36,10 +59,15 @@ const makeLoadSurveyResultRepository = () => {
 
 const makeSut = (): SutTypes => {
   const loadSurveyResultRepository = makeLoadSurveyResultRepository();
-  const sut = new DbLoadSurveyResult(loadSurveyResultRepository);
+  const loadSurveyByIdRepository = makeLoadSurveyByIdRepositoryStub();
+  const sut = new DbLoadSurveyResult(
+    loadSurveyResultRepository,
+    loadSurveyByIdRepository
+  );
   return {
     sut,
-    loadSurveyResultRepository
+    loadSurveyResultRepository,
+    loadSurveyByIdRepository
   };
 };
 
@@ -72,6 +100,17 @@ describe('LoadSurveyResult UseCase', () => {
         });
       const promise = sut.load('any_survey_id');
       await expect(promise).rejects.toThrow();
+    });
+
+    test('Should call LoadSurveyByIdRepository with correct values LoadSurveyResultRepository returns null', async () => {
+      const { sut, loadSurveyResultRepository, loadSurveyByIdRepository } =
+        makeSut();
+      jest
+        .spyOn(loadSurveyResultRepository, 'loadBySurveyId')
+        .mockResolvedValueOnce(null);
+      const loadByIdSpy = jest.spyOn(loadSurveyByIdRepository, 'loadById');
+      await sut.load('any_survey_id');
+      expect(loadByIdSpy).toHaveBeenCalledWith('any_survey_id');
     });
 
     test('Should return surveyResultModel on success', async () => {

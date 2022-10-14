@@ -8,6 +8,7 @@ This project is an Api built with Node, following the principles of **Clean Arch
  - [AddSurvey](./docs/add-survey.md)
  - [LoadSurvey](./docs/load-survey.md)
  - [SaveSurveyResult](./docs/save-survey-result.md)
+ - [LoadSurveyResult](./docs/load-survey-result.md)
 
 > ### Principles followed:
 - SOLID 

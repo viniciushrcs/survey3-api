@@ -45,7 +45,7 @@ interface SutTypes {
 
 const makeLoadSurveyById = (): LoadSurveyById => {
   class LoadSurveyByIdStub implements LoadSurveyById {
-    loadById(id: string): Promise<SurveyModel> {
+    async loadById(id: string): Promise<SurveyModel> {
       return Promise.resolve(makeFakeSurvey());
     }
   }

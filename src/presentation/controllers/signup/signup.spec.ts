@@ -4,6 +4,7 @@ import {
   AccountModel,
   AddAccount,
   AddAccountParams,
+  AuthenticationModel,
   HttpRequest,
   Validation
 } from './signup-protocols';
@@ -37,14 +38,14 @@ const makeAddAccount = (): AddAccount => {
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'aa672452-0ca0-468d-b321-f724adab617e',
-  name: 'crash',
+  name: 'any_name',
   email: 'email@email.com',
   password: 'mGcMhu6P'
 });
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
-    name: 'crash',
+    name: 'any_name',
     email: 'email@email.com',
     password: 'mGcMhu6P',
     passwordConfirmation: 'mGcMhu6P'
@@ -62,8 +63,10 @@ const makeValidation = (): Validation => {
 
 const makeAuthenticationStub = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async authenticate(authentication: AuthenticationParams): Promise<string> {
-      return Promise.resolve('any_token');
+    async authenticate(
+      authentication: AuthenticationParams
+    ): Promise<AuthenticationModel> {
+      return Promise.resolve({ accessToken: 'any_token', name: 'any_name' });
     }
   }
   return new AuthenticationStub();
@@ -95,7 +98,7 @@ describe('SignUpController', () => {
       const addAccountSpy = jest.spyOn(addAccountStub, 'add');
       await sut.handle(makeFakeRequest());
       expect(addAccountSpy).toHaveBeenCalledWith({
-        name: 'crash',
+        name: 'any_name',
         email: 'email@email.com',
         password: 'mGcMhu6P'
       });
@@ -123,9 +126,9 @@ describe('SignUpController', () => {
       expect(httpResponse).toEqual(
         ok({
           accessToken: 'any_token',
+          name: 'any_name',
           email: 'email@email.com',
           id: 'aa672452-0ca0-468d-b321-f724adab617e',
-          name: 'crash',
           password: 'mGcMhu6P'
         })
       );

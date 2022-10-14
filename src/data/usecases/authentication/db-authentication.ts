@@ -1,5 +1,6 @@
 import {
   Authentication,
+  AuthenticationModel,
   AuthenticationParams,
   HashComparer,
   LoadAccountByEmailRepository,
@@ -14,7 +15,9 @@ export class DbAuthentication implements Authentication {
     private readonly tokenGenerator: TokenGenerator,
     private readonly updateAccessTokenRepository: UpdateAccessTokenRepository
   ) {}
-  async authenticate(authentication: AuthenticationParams): Promise<string> {
+  async authenticate(
+    authentication: AuthenticationParams
+  ): Promise<AuthenticationModel> {
     let accessToken = null;
     let isPasswordValid = false;
 
@@ -37,7 +40,8 @@ export class DbAuthentication implements Authentication {
         account.id,
         accessToken
       );
+      return { accessToken, name: account.name };
     }
-    return accessToken;
+    return null;
   }
 }

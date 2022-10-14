@@ -25,14 +25,14 @@ export class LoginController implements Controller {
         return badRequest(validationError);
       }
 
-      const accessToken = await this.authentication.authenticate({
+      const authenticationModel = await this.authentication.authenticate({
         email,
         password
       });
-      if (!accessToken) {
+      if (!authenticationModel) {
         return unauthorized();
       }
-      return ok({ accessToken });
+      return ok(authenticationModel);
     } catch (e) {
       return serverError(e);
     }

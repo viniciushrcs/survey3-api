@@ -159,10 +159,10 @@ describe('DbAuthentication', () => {
       await expect(promise).rejects.toThrow();
     });
 
-    test(' Should return a new accessToken on success', async () => {
+    test(' Should return the accessToken and Name on success', async () => {
       const { sut } = makeSut();
       const accessToken = await sut.authenticate(makeFakeAuthInput());
-      expect(accessToken).toBe('any_token');
+      expect(accessToken).toEqual({ accessToken: 'any_token', name: 'name' });
     });
   });
 

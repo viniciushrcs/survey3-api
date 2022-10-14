@@ -130,25 +130,25 @@ describe('SurveyResult Mongo Repository', () => {
       await surveyResultCollection.insertMany([
         {
           surveyId: new ObjectId(survey.id),
-          accountId: new ObjectId(account.id),
+          userId: new ObjectId(account.id),
           answer: survey.answers[0].answer,
           date: new Date()
         },
         {
           surveyId: new ObjectId(survey.id),
-          accountId: new ObjectId(account.id),
+          userId: new ObjectId(account.id),
           answer: survey.answers[0].answer,
           date: new Date()
         },
         {
           surveyId: new ObjectId(survey.id),
-          accountId: new ObjectId(account.id),
+          userId: new ObjectId(account.id),
           answer: survey.answers[1].answer,
           date: new Date()
         },
         {
           surveyId: new ObjectId(survey.id),
-          accountId: new ObjectId(account.id),
+          userId: new ObjectId(account.id),
           answer: survey.answers[1].answer,
           date: new Date()
         }

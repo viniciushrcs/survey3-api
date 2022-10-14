@@ -32,17 +32,17 @@ const makeLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
   return new LoadAccountByTokenRepositoryStub();
 };
 
-const makeDecrypterStub = () => {
-  class DecrypterStub implements TokenVerifier {
+const maketokenVerifierStub = () => {
+  class tokenVerifierStub implements TokenVerifier {
     async verify(value: string): Promise<string> {
       return Promise.resolve('any_value');
     }
   }
-  return new DecrypterStub();
+  return new tokenVerifierStub();
 };
 
 const makeSut = (): SutTypes => {
-  const decrypterStub = makeDecrypterStub();
+  const decrypterStub = maketokenVerifierStub();
   const loadAccountByTokenRepositorStub = makeLoadAccountByTokenRepository();
   const sut = new DbLoadAccountByToken(
     decrypterStub,
@@ -56,28 +56,28 @@ const makeSut = (): SutTypes => {
 };
 
 describe('DbLoadAccountByToken UseCase', () => {
-  describe('Decrypter', () => {
-    test('Should call Decrypter with correct values', async () => {
+  describe('tokenVerifier', () => {
+    test('Should call tokenVerifier with correct values', async () => {
       const { sut, decrypterStub } = makeSut();
       const decryptSpy = jest.spyOn(decrypterStub, 'verify');
       await sut.loadAccount('any_token', 'any_role');
       expect(decryptSpy).toHaveBeenCalledWith('any_token');
     });
 
-    test('Should return null if Decrypter returns null', async () => {
+    test('Should return null if tokenVerifier returns null', async () => {
       const { sut, decrypterStub } = makeSut();
       jest.spyOn(decrypterStub, 'verify').mockResolvedValueOnce(null);
       const account = await sut.loadAccount('any_token', 'any_role');
       expect(account).toBeNull();
     });
 
-    test('Should throw Decrypter throws', async () => {
+    test('Should return null if tokenVerifier throws', async () => {
       const { sut, decrypterStub } = makeSut();
       jest.spyOn(decrypterStub, 'verify').mockRejectedValueOnce(() => {
         throw new Error();
       });
-      const promise = sut.loadAccount('any_token', 'any_role');
-      await expect(promise).rejects.toThrow();
+      const account = await sut.loadAccount('any_token', 'any_role');
+      expect(account).toBeNull();
     });
   });
 

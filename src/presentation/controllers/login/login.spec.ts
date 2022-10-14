@@ -7,6 +7,7 @@ import {
 import { LoginController } from './login';
 import {
   Authentication,
+  AuthenticationModel,
   AuthenticationParams,
   HttpRequest
 } from './login-protocols';
@@ -21,8 +22,10 @@ interface SutTypes {
 
 const makeAuthenticationStub = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async authenticate(authentication: AuthenticationParams): Promise<string> {
-      return Promise.resolve('any_token');
+    async authenticate(
+      authentication: AuthenticationParams
+    ): Promise<AuthenticationModel> {
+      return Promise.resolve({ accessToken: 'any_token', name: 'any_name' });
     }
   }
   return new AuthenticationStub();
@@ -91,7 +94,8 @@ describe('Login Controller', () => {
       const httpResponse = await sut.handle(makeFakeRequest());
       expect(httpResponse).toEqual(
         ok({
-          accessToken: 'any_token'
+          accessToken: 'any_token',
+          name: 'any_name'
         })
       );
     });

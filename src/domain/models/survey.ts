@@ -6,7 +6,7 @@ export interface SurveyModel {
   didAnswer?: boolean;
 }
 
-interface SurveyAnswerModel {
+export interface SurveyAnswerModel {
   image?: string;
   answer: string;
 }

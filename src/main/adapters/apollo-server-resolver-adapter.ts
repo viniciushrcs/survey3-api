@@ -12,7 +12,9 @@ export const adaptResolver = async (
 ): Promise<any> => {
   const request = { ...(args || {}) };
   const httpResponse = await controller.handle({
-    body: request
+    //todo refactor
+    body: request,
+    params: request
   });
   switch (httpResponse.statusCode) {
     case 200:

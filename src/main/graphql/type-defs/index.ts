@@ -1,7 +1,6 @@
-import query from './query';
-import mutation from './mutation';
-import login from './login';
-import signup from './signup';
-import account from './account';
+import Query from './queries';
+import Mutation from './mutations';
+import Models from './models';
+import scalars from './scalars';
 
-export default [query, mutation, login, account, signup];
+export default [Query, Mutation, Models, scalars];

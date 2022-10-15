@@ -43,3 +43,5 @@ This project is an Api built with Node, following the principles of **Clean Arch
 - Eslint 
 - Nodemon 
 - In-Memory MongoDb Server
+- GraphQl
+- Apollo Server Express

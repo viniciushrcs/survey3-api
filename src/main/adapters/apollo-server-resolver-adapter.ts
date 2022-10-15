@@ -8,10 +8,11 @@ import {
 
 export const adaptResolver = async (
   controller: Controller,
-  args: any
+  args?: any
 ): Promise<any> => {
+  const request = { ...(args || {}) };
   const httpResponse = await controller.handle({
-    body: args
+    body: request
   });
   switch (httpResponse.statusCode) {
     case 200:

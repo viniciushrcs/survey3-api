@@ -7,13 +7,11 @@
     "typeRoots": [
       "@types",
       "node_modules/@types"
-    ]
+    ],
+    "rootDirs": ["src", "tests"]
   },
   "include": [
-    "src"
-  ],
-  "exclude": [
-//    "**/*.spec.ts",
-//    "**/*.test.ts"
+    "src",
+    "tests"
   ]
 }

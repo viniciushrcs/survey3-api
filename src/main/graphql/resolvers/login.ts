@@ -1,5 +1,5 @@
-import { makeLoginController } from '../../factories/controllers/login/login';
 import { adaptResolver } from '../../adapters/apollo-server-resolver-adapter';
+import { makeLoginController } from '../../factories/controllers/login/login';
 
 export default {
   Query: {

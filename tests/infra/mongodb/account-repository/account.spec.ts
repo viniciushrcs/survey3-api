@@ -154,4 +154,20 @@ describe('Account Mongo Repository', () => {
       expect(foundAccount).toBeFalsy();
     });
   });
+
+  describe('checkByEmail', () => {
+    test('Should return true if email exists', async () => {
+      const sut = makeSut();
+      const addAccountParams = makeFakeAccount();
+      await accountCollection.insertOne(addAccountParams);
+      const exists = await sut.checkByEmail(addAccountParams.email);
+      expect(exists).toBe(true);
+    });
+
+    test('Should return false if email does not exist', async () => {
+      const sut = makeSut();
+      const exists = await sut.checkByEmail('email@email.com');
+      expect(exists).toBe(false);
+    });
+  });
 });

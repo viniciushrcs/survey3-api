@@ -1,7 +1,5 @@
 import { gql } from 'apollo-server-express';
 
 export default gql`
-  extend type Query {
-    surveys: [Survey!]! @auth
-  }
+  directive @auth on FIELD_DEFINITION
 `;

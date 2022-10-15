@@ -1,10 +1,9 @@
 import { LoadSurveyResultController } from '../../../../../src/presentation/controllers/survey-result/load-survey-result/load-survey-result-controller';
 import {
+  CheckSurveyById,
   HttpRequest,
-  LoadSurveyById,
   LoadSurveyResult
 } from '../../../../../src/presentation/controllers/survey-result/load-survey-result/load-survey-result-controller-protocols';
-import { SurveyModel } from '../../../../../src/domain/models/survey';
 import {
   forbidden,
   ok,
@@ -23,18 +22,6 @@ const makeFakeRequest = (): HttpRequest => ({
   }
 });
 
-const makeFakeSurvey = (): SurveyModel => ({
-  id: 'any_id',
-  question: 'any_question',
-  answers: [
-    {
-      image: 'any_image',
-      answer: 'any_answer'
-    }
-  ],
-  date: new Date()
-});
-
 const makeSaveSurveyResultModel = (): SurveyResultModel => ({
   surveyId: 'any_survey_id',
   question: 'any_question',
@@ -51,7 +38,7 @@ const makeSaveSurveyResultModel = (): SurveyResultModel => ({
 
 type SutTypes = {
   sut: LoadSurveyResultController;
-  loadSurveyByIdStub: LoadSurveyById;
+  checkSurveyByIdStub: CheckSurveyById;
   loadSurveyResultStub: LoadSurveyResult;
 };
 
@@ -64,25 +51,25 @@ const makeLoadSurveyResult = () => {
   return new LoadSurveyResultStub();
 };
 
-const makeLoadSurveyById = () => {
-  class LoadSurveyByIdStub implements LoadSurveyById {
-    async loadById(id: string): Promise<SurveyModel> {
-      return Promise.resolve(makeFakeSurvey());
+const makeCheckSurveyById = () => {
+  class CheckSurveyByIdStub implements CheckSurveyById {
+    async checkById(id: string): Promise<boolean> {
+      return Promise.resolve(true);
     }
   }
-  return new LoadSurveyByIdStub();
+  return new CheckSurveyByIdStub();
 };
 
 const makeSut = (): SutTypes => {
-  const loadSurveyByIdStub = makeLoadSurveyById();
+  const checkSurveyByIdStub = makeCheckSurveyById();
   const loadSurveyResultStub = makeLoadSurveyResult();
   const sut = new LoadSurveyResultController(
-    loadSurveyByIdStub,
+    checkSurveyByIdStub,
     loadSurveyResultStub
   );
   return {
     sut,
-    loadSurveyByIdStub,
+    checkSurveyByIdStub,
     loadSurveyResultStub
   };
 };
@@ -95,27 +82,27 @@ describe('LoadSurveyResult Controller', () => {
   afterAll(() => {
     MockDate.reset;
   });
-  describe('LoadSurveyById', () => {
-    test('Should call LoadSurveyById with correct value', async () => {
-      const { sut, loadSurveyByIdStub } = makeSut();
-      const loadByIdSpy = jest.spyOn(loadSurveyByIdStub, 'loadById');
+  describe('CheckSurveyById', () => {
+    test('Should call CheckSurveyById with correct value', async () => {
+      const { sut, checkSurveyByIdStub } = makeSut();
+      const checkByIdSpy = jest.spyOn(checkSurveyByIdStub, 'checkById');
       await sut.handle(makeFakeRequest());
-      expect(loadByIdSpy).toHaveBeenCalledWith('any_id');
+      expect(checkByIdSpy).toHaveBeenCalledWith('any_id');
     });
 
-    test('Should return 403 if LoadSurveyById returns null', async () => {
-      const { sut, loadSurveyByIdStub } = makeSut();
-      jest.spyOn(loadSurveyByIdStub, 'loadById').mockResolvedValueOnce(null);
+    test('Should return 403 if CheckSurveyById returns null', async () => {
+      const { sut, checkSurveyByIdStub } = makeSut();
+      jest.spyOn(checkSurveyByIdStub, 'checkById').mockResolvedValueOnce(null);
       const httpResponse = await sut.handle(makeFakeRequest());
       expect(httpResponse).toEqual(
         forbidden(new InvalidParamError('surveyId'))
       );
     });
 
-    test('Should return 500 if LoadSurveyById throws', async () => {
-      const { sut, loadSurveyByIdStub } = makeSut();
+    test('Should return 500 if CheckSurveyById throws', async () => {
+      const { sut, checkSurveyByIdStub } = makeSut();
       jest
-        .spyOn(loadSurveyByIdStub, 'loadById')
+        .spyOn(checkSurveyByIdStub, 'checkById')
         .mockRejectedValueOnce(async () => {
           throw new Error();
         });

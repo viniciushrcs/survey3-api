@@ -120,4 +120,24 @@ describe('Survey Mongo Repository', () => {
       expect(survey).toBeTruthy();
     });
   });
+
+  describe('checkById', () => {
+    test('Should return true if survey exists', async () => {
+      const sut = makeSut();
+      await surveyCollection.insertOne(makeAddSurvey('any_question'));
+      const savedResult = await surveyCollection.findOne({
+        question: 'any_question'
+      });
+      const exists = await sut.checkById(
+        MongoHelper.map<SurveyModel>(savedResult).id
+      );
+      expect(exists).toBe(true);
+    });
+
+    test('Should return false if survey not exists', async () => {
+      const sut = makeSut();
+      const exists = await sut.checkById('634aa9500de041850eb25552');
+      expect(exists).toBe(false);
+    });
+  });
 });

@@ -1,5 +1,5 @@
 FROM node:16
-WORKDIR '/usr/scr/clean-node-api'
+WORKDIR '/usr/survey-3-api'
 COPY package.json .
 RUN npm install --omit=dev
 COPY . .

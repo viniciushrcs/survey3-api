@@ -12,7 +12,7 @@ services:
     container_name: api-container
     build: .
     restart: always
-    image: clean-node-api
+    image: survey-3-api
     ports:
       - "5050:5050"
     links:

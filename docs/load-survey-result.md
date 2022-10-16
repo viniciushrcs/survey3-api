@@ -1,4 +1,4 @@
-### - LoadSurvey
+### - Load Survey Result
 > ### Success cases ✅
 1. Receive a **GET** request on route **/api/surveys/{survey_id}/results**
 2. Validate if request was made by an user

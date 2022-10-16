@@ -2,6 +2,13 @@
 
 This project is an Api built with Node, following the principles of **Clean Architecture** and respecting **TDD** practices during the development.
 
+The operations can be performed both via **REST** or **GRAPHQL**.  
+
+
+> ## What is this API about?
+- Provides operations to manage surveys. An Admin can create surveys and registered Users can answer.
+- Also, the Surveys results can be listed to registered users.
+
 > ### List of operations:
  - [SignUp](./docs/signup.md)
  - [Login](./docs/login.md)
@@ -10,38 +17,12 @@ This project is an Api built with Node, following the principles of **Clean Arch
  - [SaveSurveyResult](./docs/save-survey-result.md)
  - [LoadSurveyResult](./docs/load-survey-result.md)
 
-> ### Principles followed:
-- SOLID 
-- Separation of Concerns (SOC)
-- Don't Repeat Yourself (DRY)
-- Keep It Simple, Silly (KISS)
-- Composition Over Inheritance 
-- Small Commits
+
+> ### Development topics:
+- [Principles followed](./docs/development/principles.md)
+- [Design Patters](./docs/development/design-patterns.md)
+- [Libraries and Frameworks](./docs/development/libs-frameworks.md)
 
 
->### Design Patterns in the project:
-- Factory 
-- Adapter 
-- Composite 
-- Decorator 
-- Dependency Injection
-- Proxy
 
 
->### Libraries and Frameworks:
-- Typescript
-- NPM
-- Jest
-- Nodejs
-- Docker
-- MongoDb
-- Bcrypt
-- JsonWebToken 
-- Validator 
-- Express 
-- Supertest 
-- Eslint 
-- Nodemon 
-- In-Memory MongoDb Server
-- GraphQl
-- Apollo Server Express

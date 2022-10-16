@@ -1,0 +1,17 @@
+># Libraries and Frameworks:
+- Typescript
+- NPM
+- Jest
+- Nodejs
+- Docker
+- MongoDb
+- Bcrypt
+- JsonWebToken
+- Validator
+- Express
+- Supertest
+- Eslint
+- Nodemon
+- In-Memory MongoDb Server
+- GraphQL
+- Apollo Server Express

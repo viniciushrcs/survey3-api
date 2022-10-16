@@ -4,6 +4,8 @@ This project is an Api built with Node, following the principles of **Clean Arch
 
 The operations can be performed both via **REST** or **GRAPHQL**.  
 
+![](./docs/images/survey-image.png)
+
 
 > ## What is this API about?
 - Provides operations to manage surveys. An Admin can create surveys and registered Users can answer.

@@ -1,7 +1,7 @@
-### - LoadSurvey
+### - List All Surveys
 > ### Success cases ✅
 1. Receive a **GET** request on route **/api/surveys**
-2. Validate if request was made by an user
+2. Validate if request was made by an authenticated **user**
 3. Returns 204 if there isn't a survey
 4. Returns 200 with the surveys data
 

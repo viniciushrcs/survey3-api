@@ -6,7 +6,7 @@ This project is an Api built with Node, following the principles of **Clean Arch
  - [SignUp](./docs/signup.md)
  - [Login](./docs/login.md)
  - [AddSurvey](./docs/add-survey.md)
- - [LoadSurvey](./docs/load-survey.md)
+ - [LoadSurveys](./docs/load-surveys.md)
  - [SaveSurveyResult](./docs/save-survey-result.md)
  - [LoadSurveyResult](./docs/load-survey-result.md)
 

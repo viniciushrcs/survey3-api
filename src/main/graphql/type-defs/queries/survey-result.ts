@@ -2,6 +2,6 @@ import { gql } from 'apollo-server-express';
 
 export default gql`
   extend type Query {
-    surveyResult(surveyId: String!): SurveyResult!
+    surveyResult(surveyId: String!): SurveyResult! @auth
   }
 `;

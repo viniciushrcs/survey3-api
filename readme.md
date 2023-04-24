@@ -24,7 +24,7 @@ The operations can be performed both via **REST** or **GRAPHQL**.
 - [Running on Docker](./docs/development/running-on-docker.md)
 - [Running locally](./docs/development/running-locally.md)
 - [Principles followed](./docs/development/principles.md)
-- [Design Patters](./docs/development/design-patterns.md)
+- [Design Patterns](./docs/development/design-patterns.md)
 - [Libraries and Frameworks](./docs/development/libs-frameworks.md)
 
 
